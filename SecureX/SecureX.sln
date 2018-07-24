@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SecureXLibrary", "SecureX\SecureXLibrary.csproj", "{02D7B034-A4D4-41C1-85E1-52EC1CCC31F3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B6894AE7-EAB2-4E09-8054-1859F4E2E6AC} = {B6894AE7-EAB2-4E09-8054-1859F4E2E6AC}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SecureXContext", "SecureXContext\SecureXContext.csproj", "{B6894AE7-EAB2-4E09-8054-1859F4E2E6AC}"
 EndProject
