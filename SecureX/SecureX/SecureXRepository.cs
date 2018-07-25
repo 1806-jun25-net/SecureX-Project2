@@ -5,13 +5,22 @@ using System.Text;
 
 namespace SecureXLibrary
 {
-    class SecureXRepository
+    public class SecureXRepository
     {
         private readonly SecureXdbContext _db;
 
         public SecureXRepository(SecureXdbContext db)
         {
             _db = db ?? throw new ArgumentNullException(nameof(db));
+        }
+
+        public SecureXRepository()
+        {
+        }
+
+        public void AddUser()
+        {
+
         }
 
         //ELA
@@ -63,12 +72,10 @@ namespace SecureXLibrary
         }
 
         //ELA
-        public CreditCard CalculateDebt(Transaction Transaction, CreditCard CreditCard)
+        public CreditCard CalculateCardTransaction(Transaction Transaction, CreditCard CreditCard)
         {
-            
-            CreditCard.CurrentDebt += Transaction.TransactionAmount;
-            return CreditCard;
 
+            return CreditCard.CalculateCardTransaction(Transaction, CreditCard);
         }
 
         public void CalculateInterest()
