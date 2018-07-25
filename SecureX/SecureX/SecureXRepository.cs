@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace SecureXLibrary
 {
@@ -19,9 +20,8 @@ namespace SecureXLibrary
         {
         }
 
-        //ELA
-        //Controller
-        public void AddMoney(decimal deposit, int id)
+        //ELA async
+        public async void AddMoney(decimal deposit, int id)
         {
             var accounts = _db.Account;
 
@@ -35,7 +35,7 @@ namespace SecureXLibrary
                         if (account.Id == id)
                         {
                             account.Funds += deposit;
-                            _db.SaveChanges();
+                           await _db.SaveChangesAsync();
                         }
                     }
                 }
@@ -57,9 +57,9 @@ namespace SecureXLibrary
 
         }
 
-        public void AuthorizeNewLocation()
+        public async void AuthorizeNewLocation()
         {
-
+            //await
         }
 
         public Transaction AutoPayBills(DateTime date, Transaction Transaction, Account Account )
@@ -114,8 +114,6 @@ namespace SecureXLibrary
         }
 
 
-
-        //Repo
         public Bank AddMoneyToReserve(Transaction Transaction, Bank Bank)
         {
             Bank.Reserves += Transaction.TransactionAmount;
@@ -205,7 +203,7 @@ namespace SecureXLibrary
         }
 
         //ELA
-        public CreditCard GetCreditInformation(int id)
+        public  CreditCard GetCreditInformation(int id)
         {
             var creditcards = _db.CreditCard;
 
@@ -217,7 +215,8 @@ namespace SecureXLibrary
 
                     if (creditcard.Id == id)
                     {
-                        return Mapper.Map(creditcard);
+
+                        Mapper.Map(creditcard);
                     }
                 }
 
@@ -274,12 +273,8 @@ namespace SecureXLibrary
             {
                 //return employee?
             }
-
-
-
         }
 
-        // Account
         public IEnumerable<Account> GetAccounts()
         {
             return Mapper.Map(_db.Account);
@@ -287,25 +282,27 @@ namespace SecureXLibrary
 
         public Account GetAccountById(int id)
         {
-            return Mapper.Map(_db.Account.First(x => x.Id == id));
+            return  Mapper.Map(_db.Account.First(x => x.Id == id));
         }
 
-        public void AddAccount(Account account)
+        //ELA async
+        public async void AddAccount(Account account)
         {
-            _db.Add(Mapper.Map(account));
+           await _db.AddAsync(Mapper.Map(account));
         }
 
-        public void DeleteAccount(int accountId)
+        //ELA async
+        public async void DeleteAccount(int accountId)
         {
-            _db.Remove(_db.Account.Find(accountId));
+            _db.Remove(await _db.Account.FindAsync(accountId));
         }
 
-        public void UpdateAccount(Account account)
+        //ELA async
+        public async void UpdateAccount(Account account)
         {
-            _db.Entry(_db.Account.Find(account.Id)).CurrentValues.SetValues(Mapper.Map(account));
+            _db.Entry(await _db.Account.FindAsync(account.Id)).CurrentValues.SetValues(Mapper.Map(account));
         }
 
-        // Bank
         public IEnumerable<Bank> GetBanks()
         {
             return Mapper.Map(_db.Bank);
@@ -316,9 +313,10 @@ namespace SecureXLibrary
             return Mapper.Map(_db.Bank.First(x => x.Id == id));
         }
 
-        public void AddBank(Bank bank)
+        //ELA
+        public async void AddBank(Bank bank)
         {
-            _db.Add(Mapper.Map(bank));
+            await _db.AddAsync(Mapper.Map(bank));
         }
 
         public void DeleteBank(int bankId)
@@ -357,7 +355,6 @@ namespace SecureXLibrary
             _db.Entry(_db.CreditCard.Find(creditCard.Id)).CurrentValues.SetValues(Mapper.Map(creditCard));
         }
 
-        // Customer
         public IEnumerable<Customer> GetCustomers()
         {
             return Mapper.Map(_db.Customer);
@@ -383,7 +380,6 @@ namespace SecureXLibrary
             _db.Entry(_db.Customer.Find(customer.Id)).CurrentValues.SetValues(Mapper.Map(customer));
         }
 
-        // Employee
         public IEnumerable<Employee> GetEmployees()
         {
             return Mapper.Map(_db.Employee);
@@ -409,7 +405,6 @@ namespace SecureXLibrary
             _db.Entry(_db.Employee.Find(employee.Id)).CurrentValues.SetValues(Mapper.Map(employee));
         }
 
-        // Transaction
         public IEnumerable<Transaction> GetTransactions()
         {
             return Mapper.Map(_db.Transaction);
@@ -435,7 +430,6 @@ namespace SecureXLibrary
             _db.Entry(_db.Transaction.Find(transaction.Id)).CurrentValues.SetValues(Mapper.Map(transaction));
         }
 
-        // User
         public IEnumerable<User> GetUsers()
         {
             return Mapper.Map(_db.User);
@@ -461,10 +455,10 @@ namespace SecureXLibrary
             _db.Entry(_db.User.Find(user.Id)).CurrentValues.SetValues(Mapper.Map(user));
         }
 
-        // Save
-        public void Save()
+        //ELA async
+        public async void Save()
         {
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
         }
     }
 }
