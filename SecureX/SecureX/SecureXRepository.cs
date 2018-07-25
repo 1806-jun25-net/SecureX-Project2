@@ -72,9 +72,20 @@ namespace SecureXLibrary
 
         }
 
-        public void CalculateInterest()
+        //CC
+        public decimal CalculateInterest(int accountId)
         {
+            var interest = 0.00m;
+            var APY = 0.01m; // yearly rate
+            var MPY = APY / 12; // monthly rate
 
+            var account = GetAccountById(accountId);
+            if(account.AccountType == "Savings")
+            {
+                interest = (decimal)account.Funds * MPY; // calculate interest for next month
+            }
+
+            return interest;
         }
 
         public void ChangeUserLocation()
