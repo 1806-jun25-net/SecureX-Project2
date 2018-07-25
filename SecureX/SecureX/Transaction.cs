@@ -24,5 +24,6 @@ namespace SecureXLibrary
         public string Recipient { get; set; }
         public DateTime DateOfTransaction { get; set; }
         public decimal TransactionAmount { get; set; }
+
     }
 }
