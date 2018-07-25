@@ -1,4 +1,5 @@
-﻿using SecureXContext;
+﻿using Microsoft.EntityFrameworkCore;
+using SecureXContext;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -340,9 +341,10 @@ namespace SecureXLibrary
             return Mapper.Map(_db.CreditCard.First(x => x.Id == id));
         }
 
-        public void AddCreditCard(CreditCard creditCard)
+        //ELA async
+        public async void AddCreditCard(CreditCard creditCard)
         {
-            _db.Add(Mapper.Map(creditCard));
+           await _db.AddAsync(Mapper.Map(creditCard));
         }
 
         public void DeleteCreditCard(int creditCardId)
@@ -365,9 +367,10 @@ namespace SecureXLibrary
             return Mapper.Map(_db.Customer.First(x => x.Id == id));
         }
 
-        public void AddCustomer(Customer customer)
+        //ELA async
+        public async void AddCustomer(Customer customer)
         {
-            _db.Add(Mapper.Map(customer));
+           await _db.AddAsync(Mapper.Map(customer));
         }
 
         public void DeleteCustomer(int customerId)
@@ -390,9 +393,10 @@ namespace SecureXLibrary
             return Mapper.Map(_db.Employee.First(x => x.Id == id));
         }
 
-        public void AddEmployee(Employee employee)
+        //ELA async
+        public async void AddEmployee(Employee employee)
         {
-            _db.Add(Mapper.Map(employee));
+           await _db.AddAsync(Mapper.Map(employee));
         }
 
         public void DeleteEmployee(int employeeId)
@@ -410,14 +414,15 @@ namespace SecureXLibrary
             return Mapper.Map(_db.Transaction);
         }
 
-        public Transaction GetTransactionById(int id)
+        public async Task<Transaction> GetTransactionById(int id)
         {
             return Mapper.Map(_db.Transaction.First(x => x.Id == id));
         }
 
-        public void AddTransaction(Transaction transaction)
+        //ELA async
+        public async void AddTransaction(Transaction transaction)
         {
-            _db.Add(Mapper.Map(transaction));
+           await _db.AddAsync(Mapper.Map(transaction));
         }
 
         public void DeleteTransaction(int transactionId)
@@ -440,12 +445,13 @@ namespace SecureXLibrary
             return Mapper.Map(_db.User.First(x => x.Id == id));
         }
 
-        public void AddUser(User user)
+        //ELA async
+        public async void AddUser(User user)
         {
-            _db.Add(Mapper.Map(user));
+           await _db.AddAsync(Mapper.Map(user));
         }
 
-        public void DeleteUser(int userId)
+        public  void DeleteUser(int userId)
         {
             _db.Remove(_db.User.Find(userId));
         }
