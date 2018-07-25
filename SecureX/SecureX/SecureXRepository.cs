@@ -86,7 +86,7 @@ namespace SecureXLibrary
 
         public decimal CalculateInterest(Account account)
         {
-            return account.CalculateInterest(account);
+            return account.CalculateInterest();
         }
 
         public void ChangeUserLocation()

@@ -30,16 +30,15 @@ namespace SecureXLibrary
         }
 
 
-        public decimal CalculateInterest(Account account)
+        public decimal CalculateInterest()
         {
             var interest = 0.00m;
             var APY = 0.01m; // yearly rate
             var MPY = APY / 12; // monthly rate
 
-            if (account.AccountType == "S")
+            if (AccountType == "S")
             {
-                interest = (decimal)account.Funds * MPY; // calculate interest for next month
-
+                interest = (decimal)Funds * MPY; // calculate interest for next month
             }
 
             return interest;
