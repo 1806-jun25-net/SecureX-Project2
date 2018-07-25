@@ -58,8 +58,17 @@ namespace SecureXLibrary
 
         }
 
-        public void AutoPayBills()
+        public Transaction AutoPayBills(DateTime date, Transaction Transaction, Account Account )
         {
+            DateTime now = DateTime.Now;
+
+            if (date.Month == now.Month && date.Day == date.Day)
+            {
+                Account.Funds -= Transaction.TransactionAmount;
+                return Transaction;
+            }
+
+            return null;
 
         }
 
@@ -87,22 +96,27 @@ namespace SecureXLibrary
             return null;
         }
 
-        public void TransferMoney()
+        public Transaction TransferMoney(Transaction Transaction, Account Account1, Account Account2)
         {
-
+            Account1.Funds -= Transaction.TransactionAmount;
+            Account2.Funds += Transaction.TransactionAmount;
+            return Transaction;
         }
 
-        public void WithdrawlMoney()
+        public Account WithdrawlMoney(Transaction Transaction, Account Account)
         {
+            Account.Funds -= Transaction.TransactionAmount;
+            return Account;
 
         }
 
 
 
         //Repo
-        public void AddMoneyToReserve()
+        public Bank AddMoneyToReserve(Transaction Transaction, Bank Bank)
         {
-
+            Bank.Reserves += Transaction.TransactionAmount;
+            return Bank;
         }
 
         public void ApproveUser()
@@ -125,9 +139,9 @@ namespace SecureXLibrary
 
         }
 
-        public void CheckReserveAmount()
+        public decimal CheckReserveAmount(Bank Bank)
         {
-
+            return Bank.Reserves;
         }
 
         //ELA
