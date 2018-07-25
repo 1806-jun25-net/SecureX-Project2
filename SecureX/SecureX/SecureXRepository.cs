@@ -1,6 +1,7 @@
 ﻿using SecureXContext;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace SecureXLibrary
@@ -268,6 +269,194 @@ namespace SecureXLibrary
 
 
 
+        }
+
+        // Account
+        public IEnumerable<Account> GetAccounts()
+        {
+            return Mapper.Map(_db.Account);
+        }
+
+        public Account GetAccountById(int id)
+        {
+            return Mapper.Map(_db.Account.First(x => x.Id == id));
+        }
+
+        public void AddAccount(Account account)
+        {
+            _db.Add(Mapper.Map(account));
+        }
+
+        public void DeleteAccount(int accountId)
+        {
+            _db.Remove(_db.Account.Find(accountId));
+        }
+
+        public void UpdateAccount(Account account)
+        {
+            _db.Entry(_db.Account.Find(account.Id)).CurrentValues.SetValues(Mapper.Map(account));
+        }
+
+        // Bank
+        public IEnumerable<Bank> GetBanks()
+        {
+            return Mapper.Map(_db.Bank);
+        }
+
+        public Bank GetBankById(int id)
+        {
+            return Mapper.Map(_db.Bank.First(x => x.Id == id));
+        }
+
+        public void AddBank(Bank bank)
+        {
+            _db.Add(Mapper.Map(bank));
+        }
+
+        public void DeleteBank(int bankId)
+        {
+            _db.Remove(_db.Bank.Find(bankId));
+        }
+
+        public void UpdateBank(Bank bank)
+        {
+            _db.Entry(_db.Bank.Find(bank.Id)).CurrentValues.SetValues(Mapper.Map(bank));
+        }
+
+        // CreditCard
+        public IEnumerable<CreditCard> GetCreditCards()
+        {
+            return Mapper.Map(_db.CreditCard);
+        }
+
+        public CreditCard GetCreditCardById(int id)
+        {
+            return Mapper.Map(_db.CreditCard.First(x => x.Id == id));
+        }
+
+        public void AddCreditCard(CreditCard creditCard)
+        {
+            _db.Add(Mapper.Map(creditCard));
+        }
+
+        public void DeleteCreditCard(int creditCardId)
+        {
+            _db.Remove(_db.CreditCard.Find(creditCardId));
+        }
+
+        public void UpdateCreditCard(CreditCard creditCard)
+        {
+            _db.Entry(_db.CreditCard.Find(creditCard.Id)).CurrentValues.SetValues(Mapper.Map(creditCard));
+        }
+
+        // Customer
+        public IEnumerable<Customer> GetCustomers()
+        {
+            return Mapper.Map(_db.Customer);
+        }
+
+        public Customer GetCustomerById(int id)
+        {
+            return Mapper.Map(_db.Customer.First(x => x.Id == id));
+        }
+
+        public void AddCustomer(Customer customer)
+        {
+            _db.Add(Mapper.Map(customer));
+        }
+
+        public void DeleteCustomer(int customerId)
+        {
+            _db.Remove(_db.Customer.Find(customerId));
+        }
+
+        public void UpdateCustomer(Customer customer)
+        {
+            _db.Entry(_db.Customer.Find(customer.Id)).CurrentValues.SetValues(Mapper.Map(customer));
+        }
+
+        // Employee
+        public IEnumerable<Employee> GetEmployees()
+        {
+            return Mapper.Map(_db.Employee);
+        }
+
+        public Employee GetEmployeeById(int id)
+        {
+            return Mapper.Map(_db.Employee.First(x => x.Id == id));
+        }
+
+        public void AddEmployee(Employee employee)
+        {
+            _db.Add(Mapper.Map(employee));
+        }
+
+        public void DeleteEmployee(int employeeId)
+        {
+            _db.Remove(_db.Employee.Find(employeeId));
+        }
+
+        public void UpdateEmployee(Employee employee)
+        {
+            _db.Entry(_db.Employee.Find(employee.Id)).CurrentValues.SetValues(Mapper.Map(employee));
+        }
+
+        // Transaction
+        public IEnumerable<Transaction> GetTransactions()
+        {
+            return Mapper.Map(_db.Transaction);
+        }
+
+        public Transaction GetTransactionById(int id)
+        {
+            return Mapper.Map(_db.Transaction.First(x => x.Id == id));
+        }
+
+        public void AddTransaction(Transaction transaction)
+        {
+            _db.Add(Mapper.Map(transaction));
+        }
+
+        public void DeleteTransaction(int transactionId)
+        {
+            _db.Remove(_db.Transaction.Find(transactionId));
+        }
+
+        public void UpdateTransaction(Transaction transaction)
+        {
+            _db.Entry(_db.Transaction.Find(transaction.Id)).CurrentValues.SetValues(Mapper.Map(transaction));
+        }
+
+        // User
+        public IEnumerable<User> GetUsers()
+        {
+            return Mapper.Map(_db.User);
+        }
+
+        public User GetUserById(int id)
+        {
+            return Mapper.Map(_db.User.First(x => x.Id == id));
+        }
+
+        public void AddUser(User user)
+        {
+            _db.Add(Mapper.Map(user));
+        }
+
+        public void DeleteUser(int userId)
+        {
+            _db.Remove(_db.User.Find(userId));
+        }
+
+        public void UpdateUser(User user)
+        {
+            _db.Entry(_db.User.Find(user.Id)).CurrentValues.SetValues(Mapper.Map(user));
+        }
+
+        // Save
+        public void Save()
+        {
+            _db.SaveChanges();
         }
     }
 }
