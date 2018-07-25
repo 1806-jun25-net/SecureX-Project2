@@ -3,7 +3,7 @@ using Xunit;
 
 namespace SecureXTest
 {
-    public class UnitTest1
+    public class UnitTest
     {
         [Fact]
         public void Test1()
