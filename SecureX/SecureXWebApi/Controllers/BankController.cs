@@ -8,8 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace SecureXWebApi.Controllers
 {
-    [Route("api/Account")]
-    public class AccountController : Controller
+    [Route("api/Bank")]
+    public class BankController : Controller
     {
         // GET: api/<controller>
         [HttpGet]
