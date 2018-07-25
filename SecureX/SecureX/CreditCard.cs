@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SecureXLibrary
 {
-   
+
 
     public class CreditCard
     {
@@ -25,7 +25,6 @@ namespace SecureXLibrary
         public decimal CurrentDebt { get; set; }
         public int CreditCardNumber { get; set; }
         public int CustomerId { get; set; }
-
 
         //ELA
         public CreditCard CalculateCardTransaction(Transaction Transaction, CreditCard CreditCard)
@@ -82,8 +81,6 @@ namespace SecureXLibrary
             return CreditCard;
 
         }
+
     }
-
-
-
 }
