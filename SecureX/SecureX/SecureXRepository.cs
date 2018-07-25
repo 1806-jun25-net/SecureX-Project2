@@ -6,7 +6,7 @@ using System.Text;
 
 namespace SecureXLibrary
 {
-    class SecureXRepository
+    public class SecureXRepository
     {
         private readonly SecureXdbContext _db;
 
@@ -72,9 +72,20 @@ namespace SecureXLibrary
 
         }
 
-        public void CalculateInterest()
+        //CC
+        public decimal CalculateInterest(int accountId)
         {
+            var interest = 0.00m;
+            var APY = 0.01m; // yearly rate
+            var MPY = APY / 12; // monthly rate
 
+            var account = GetAccountById(accountId);
+            if(account.AccountType == "Savings")
+            {
+                interest = (decimal)account.Funds * MPY; // calculate interest for next month
+            }
+
+            return interest;
         }
 
         public void ChangeUserLocation()
@@ -87,22 +98,40 @@ namespace SecureXLibrary
             return null;
         }
 
-        public void TransferMoney()
+        //CC
+        public void TransferMoney(int sendingAccountId, int receivingAccountId, decimal transferAmount)
         {
-
+            var sendingAccount = GetAccountById(sendingAccountId);
+            var receivingAccount = GetAccountById(receivingAccountId);
+            if (sendingAccount.NotOverdraw(transferAmount)) // check that sending account has enough funds to transfer
+            {
+                sendingAccount.Withdraw(transferAmount);
+                receivingAccount.Deposit(transferAmount);
+                UpdateAccount(sendingAccount);
+                UpdateAccount(receivingAccount);
+                Save();
+            }
         }
 
-        public void WithdrawlMoney()
+        //CC
+        public void WithdrawlMoney(int accountId, decimal withdrawlAmount)
         {
-
+            var account = GetAccountById(accountId);
+            if (account.NotOverdraw(withdrawlAmount))
+            {
+                account.Withdraw(withdrawlAmount);
+                UpdateAccount(account);
+                Save();
+            }
         }
-
-
-
-        //Repo
-        public void AddMoneyToReserve()
+                
+        //CC
+        public void AddMoneyToReserve(int bankId, decimal amount)
         {
-
+            var bank = GetBankById(bankId);
+            bank.Deposit(amount);
+            UpdateBank(bank);
+            Save();
         }
 
         public void ApproveUser()
