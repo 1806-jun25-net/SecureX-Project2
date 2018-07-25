@@ -113,13 +113,14 @@ namespace SecureXLibrary
                 Save();
             }
         }
-
-
-
-        //Repo
-        public void AddMoneyToReserve()
+                
+        //CC
+        public void AddMoneyToReserve(int bankId, decimal amount)
         {
-
+            var bank = GetBankById(bankId);
+            bank.Deposit(amount);
+            UpdateBank(bank);
+            Save();
         }
 
         public void ApproveUser()
