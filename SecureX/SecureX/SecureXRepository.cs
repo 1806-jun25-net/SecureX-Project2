@@ -19,11 +19,6 @@ namespace SecureXLibrary
         {
         }
 
-        public void AddUser()
-        {
-
-        }
-
         //ELA
         //Controller
         public void AddMoney(decimal deposit, int id)
@@ -67,32 +62,31 @@ namespace SecureXLibrary
 
         }
 
-        public void AutoPayBills()
+        public Transaction AutoPayBills(DateTime date, Transaction Transaction, Account Account )
         {
+            DateTime now = DateTime.Now;
+
+            if (date.Month == now.Month && date.Day == date.Day)
+            {
+                Account.Funds -= Transaction.TransactionAmount;
+                return Transaction;
+            }
+
+            return null;
 
         }
 
         //ELA
-        public CreditCard CalculateCardTransaction(Transaction Transaction, CreditCard CreditCard)
+        public CreditCard CalculateDebt(Transaction Transaction, CreditCard CreditCard)
         {
 
             return CreditCard.CalculateCardTransaction(Transaction, CreditCard);
+
         }
 
-        //CC
-        public decimal CalculateInterest(int accountId)
+        public decimal CalculateInterest(Account account)
         {
-            var interest = 0.00m;
-            var APY = 0.01m; // yearly rate
-            var MPY = APY / 12; // monthly rate
-
-            var account = GetAccountById(accountId);
-            if(account.AccountType == "Savings")
-            {
-                interest = (decimal)account.Funds * MPY; // calculate interest for next month
-            }
-
-            return interest;
+            return account.CalculateInterest();
         }
 
         public void ChangeUserLocation()
@@ -105,40 +99,27 @@ namespace SecureXLibrary
             return null;
         }
 
-        //CC
-        public void TransferMoney(int sendingAccountId, int receivingAccountId, decimal transferAmount)
+        public Transaction TransferMoney(Transaction Transaction, Account Account1, Account Account2)
         {
-            var sendingAccount = GetAccountById(sendingAccountId);
-            var receivingAccount = GetAccountById(receivingAccountId);
-            if (sendingAccount.NotOverdraw(transferAmount)) // check that sending account has enough funds to transfer
-            {
-                sendingAccount.Withdraw(transferAmount);
-                receivingAccount.Deposit(transferAmount);
-                UpdateAccount(sendingAccount);
-                UpdateAccount(receivingAccount);
-                Save();
-            }
+            Account1.Funds -= Transaction.TransactionAmount;
+            Account2.Funds += Transaction.TransactionAmount;
+            return Transaction;
         }
 
-        //CC
-        public void WithdrawlMoney(int accountId, decimal withdrawlAmount)
+        public Account WithdrawlMoney(Transaction Transaction, Account Account)
         {
-            var account = GetAccountById(accountId);
-            if (account.NotOverdraw(withdrawlAmount))
-            {
-                account.Withdraw(withdrawlAmount);
-                UpdateAccount(account);
-                Save();
-            }
+            Account.Funds -= Transaction.TransactionAmount;
+            return Account;
+
         }
-                
-        //CC
-        public void AddMoneyToReserve(int bankId, decimal amount)
+
+
+
+        //Repo
+        public Bank AddMoneyToReserve(Transaction Transaction, Bank Bank)
         {
-            var bank = GetBankById(bankId);
-            bank.Deposit(amount);
-            UpdateBank(bank);
-            Save();
+            Bank.Reserves += Transaction.TransactionAmount;
+            return Bank;
         }
 
         public void ApproveUser()
@@ -151,19 +132,10 @@ namespace SecureXLibrary
 
         }
 
-        //ELA
-        //Business logic in repo? 
-        public CreditCard CalculateCreditLeft(Transaction Transaction, CreditCard CreditCard)
+
+        public decimal CheckReserveAmount(Bank Bank)
         {
-
-            CreditCard.CreditLimit += Transaction.TransactionAmount;
-            return CreditCard;
-
-        }
-
-        public void CheckReserveAmount()
-        {
-
+            return Bank.Reserves;
         }
 
         //ELA
