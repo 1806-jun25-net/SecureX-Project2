@@ -6,7 +6,7 @@ using System.Text;
 
 namespace SecureXLibrary
 {
-    class SecureXRepository
+    public class SecureXRepository
     {
         private readonly SecureXdbContext _db;
 
