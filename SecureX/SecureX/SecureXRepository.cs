@@ -6,7 +6,7 @@ using System.Text;
 
 namespace SecureXLibrary
 {
-    class SecureXRepository
+    public class SecureXRepository
     {
         private readonly SecureXdbContext _db;
 
@@ -87,14 +87,31 @@ namespace SecureXLibrary
             return null;
         }
 
-        public void TransferMoney()
+        //CC
+        public void TransferMoney(int sendingAccountId, int receivingAccountId, decimal transferAmount)
         {
-
+            var sendingAccount = GetAccountById(sendingAccountId);
+            var receivingAccount = GetAccountById(receivingAccountId);
+            if (sendingAccount.NotOverdraw(transferAmount)) // check that sending account has enough funds to transfer
+            {
+                sendingAccount.Withdraw(transferAmount);
+                receivingAccount.Deposit(transferAmount);
+                UpdateAccount(sendingAccount);
+                UpdateAccount(receivingAccount);
+                Save();
+            }
         }
 
-        public void WithdrawlMoney()
+        //CC
+        public void WithdrawlMoney(int accountId, decimal withdrawlAmount)
         {
-
+            var account = GetAccountById(accountId);
+            if (account.NotOverdraw(withdrawlAmount))
+            {
+                account.Withdraw(withdrawlAmount);
+                UpdateAccount(account);
+                Save();
+            }
         }
 
 
