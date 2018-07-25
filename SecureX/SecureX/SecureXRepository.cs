@@ -15,6 +15,10 @@ namespace SecureXLibrary
             _db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
+        public SecureXRepository()
+        {
+        }
+
         //ELA
         //Controller
         public void AddMoney(decimal deposit, int id)

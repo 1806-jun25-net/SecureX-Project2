@@ -25,9 +25,5 @@ namespace SecureXLibrary
         public DateTime DateOfTransaction { get; set; }
         public decimal TransactionAmount { get; set; }
 
-        public Transaction()
-        {
-            DateOfTransaction = DateTime.Now;
-        }
     }
 }

@@ -12,7 +12,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SecureXContext", "SecureXCo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SecureXTest", "SecureXTest\SecureXTest.csproj", "{128214D7-087D-4652-AF49-C7178A8E23E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecureXWebApi", "SecureXWebApi\SecureXWebApi.csproj", "{253D60AB-E144-45CC-B6E4-C52BE5CED5D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SecureXWebApi", "SecureXWebApi\SecureXWebApi.csproj", "{253D60AB-E144-45CC-B6E4-C52BE5CED5D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
