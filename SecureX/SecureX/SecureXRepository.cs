@@ -15,6 +15,15 @@ namespace SecureXLibrary
             _db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
+        public SecureXRepository()
+        {
+        }
+
+        public void AddUser()
+        {
+
+        }
+
         //ELA
         //Controller
         public void AddMoney(decimal deposit, int id)
@@ -64,12 +73,10 @@ namespace SecureXLibrary
         }
 
         //ELA
-        public CreditCard CalculateDebt(Transaction Transaction, CreditCard CreditCard)
+        public CreditCard CalculateCardTransaction(Transaction Transaction, CreditCard CreditCard)
         {
-            
-            CreditCard.CurrentDebt += Transaction.TransactionAmount;
-            return CreditCard;
 
+            return CreditCard.CalculateCardTransaction(Transaction, CreditCard);
         }
 
         //CC
