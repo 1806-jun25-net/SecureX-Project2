@@ -27,6 +27,21 @@ namespace SecureXLibrary
         public void Deposit(decimal amount)
         {
             Funds += amount;
-        }        
+        }
+
+
+        public decimal CalculateInterest()
+        {
+            var interest = 0.00m;
+            var APY = 0.01m; // yearly rate
+            var MPY = APY / 12; // monthly rate
+
+            if (AccountType == "S")
+            {
+                interest = (decimal)Funds * MPY; // calculate interest for next month
+            }
+
+            return interest;
+        }
     }
 }
