@@ -75,15 +75,14 @@ namespace SecureXLibrary
         //ELA
         public CreditCard CalculateDebt(Transaction Transaction, CreditCard CreditCard)
         {
-            
-            CreditCard.CurrentDebt += Transaction.TransactionAmount;
-            return CreditCard;
+
+            return CreditCard.CalculateCardTransaction(Transaction, CreditCard);
 
         }
 
-        public void CalculateInterest()
+        public decimal CalculateInterest(Account account)
         {
-
+            return account.CalculateInterest(account);
         }
 
         public void ChangeUserLocation()
@@ -129,15 +128,6 @@ namespace SecureXLibrary
 
         }
 
-        //ELA
-        //Business logic in repo? 
-        public CreditCard CalculateCreditLeft(Transaction Transaction, CreditCard CreditCard)
-        {
-
-            CreditCard.CreditLimit += Transaction.TransactionAmount;
-            return CreditCard;
-
-        }
 
         public decimal CheckReserveAmount(Bank Bank)
         {
