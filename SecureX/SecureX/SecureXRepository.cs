@@ -277,7 +277,7 @@ namespace SecureXLibrary
         }
 
         public IEnumerable<Account> GetAccounts()
-        {
+        {            
             return Mapper.Map(_db.Account);
         }
 
