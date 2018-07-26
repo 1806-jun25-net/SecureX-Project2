@@ -31,7 +31,7 @@ namespace SecureXLibrary
             return account;
         }
 
-        public async void AuthorizeNewLocation()
+        public async Task AuthorizeNewLocation()
         {
             //await
         }
@@ -67,7 +67,7 @@ namespace SecureXLibrary
             return account.CalculateInterest();
         }
 
-        public async void ChangeCustomerLocation(Customer Customer, Bank Bank)
+        public async Task ChangeCustomerLocation(Customer Customer, Bank Bank)
         {   
             Customer.City = Bank.City;
             _db.Entry(await _db.Account.FindAsync(Customer.Id)).CurrentValues.SetValues(Mapper.Map(Customer));
