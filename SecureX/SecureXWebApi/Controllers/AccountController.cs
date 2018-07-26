@@ -32,7 +32,8 @@ namespace SecureXWebApi.Controllers
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Account>> GetById(int x)
+        [FormatFilter]
+        public async Task<ActionResult<Account>> GetById(int id)
         {
             if (!ModelState.IsValid)
             {
@@ -40,7 +41,7 @@ namespace SecureXWebApi.Controllers
             }
             try
             {
-                var account = await _Repo.GetAccountById(x);
+                var account = await _Repo.GetAccountById(id);
                 return Ok(account);
             }
             catch (DbUpdateException ex)
@@ -51,8 +52,9 @@ namespace SecureXWebApi.Controllers
 
         // POST api/<controller>
         [HttpPost]
-        public IActionResult Create(Account account)
+        public IActionResult Create([FromBody]Account account)
         {
+            account.Id = 0;
             _Repo.AddAccount(account);
             _Repo.Save();
 
@@ -61,7 +63,7 @@ namespace SecureXWebApi.Controllers
 
         // PUT api/<controller>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(string type , Account account)
+        public async Task<IActionResult> Update(string type ,[FromBody] Account account)
         {
             Account selectAcc = await _Repo.GetAccountById(account.Id);
             
