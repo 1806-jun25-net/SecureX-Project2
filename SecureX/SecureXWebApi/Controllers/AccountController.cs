@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SecureXLibrary;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace SecureXWebApi.Controllers
 {
-    [Route("api/Account")]
+    [Route("api/[controller]")]
     [ApiController]
     public class AccountController : Controller
     {
@@ -26,34 +28,70 @@ namespace SecureXWebApi.Controllers
         
         // GET: api/<controller>
         [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
+        public async Task<ActionResult> GetAll()
+        {            
+                var accountlist = await _Repo.GetAccounts();
+                return Ok(accountlist);
         }
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<ActionResult<Account>> GetById(int x)
         {
-            return "value";
+            if (!ModelState.IsValid)
+            {
+                return NotFound();
+            }
+            try
+            {
+                var account = await _Repo.GetAccountById(x);
+                return Ok(account);
+            }
+            catch (DbUpdateException ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         // POST api/<controller>
         [HttpPost]
-        public void Post([FromBody]string value)
+        public IActionResult Create(Account account)
         {
+            _Repo.AddAccount(account);
+            _Repo.Save();
+
+            return CreatedAtRoute("Get Account", new { id = account.Id }, account);
         }
 
         // PUT api/<controller>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public async Task<IActionResult> Update(int id, Account account)
         {
+            var selectAcc = _Repo.GetAccountById(id);
+            if(selectAcc == null)
+            {
+                return NotFound();
+            }
+            selectAcc.AccountType = account.AccountType;
+            await _Repo.Save();
+
+            return NoContent();
         }
 
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
+            var selectAcc = _Repo.GetAccountById(id);
+            if(selectAcc == null)
+            {
+                return NotFound();
+            }
+
+            _Repo.DeleteAccount(id);
+            _Repo.Save();
+
+            return NoContent();
         }
     }
 }
