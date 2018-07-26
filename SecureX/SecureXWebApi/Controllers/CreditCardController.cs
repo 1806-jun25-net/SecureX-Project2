@@ -11,7 +11,7 @@ using SecureXLibrary;
 
 namespace SecureXWebApi.Controllers
 {
-    [Route("api/CreditCard")]
+    [Route("api/[controller]")]
     public class CreditCardController : Controller
     {
         private readonly SecureXRepository _Repo;

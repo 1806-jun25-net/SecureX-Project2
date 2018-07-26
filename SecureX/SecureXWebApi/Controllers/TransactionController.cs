@@ -11,7 +11,7 @@ using SecureXLibrary;
 
 namespace SecureXWebApi.Controllers
 {
-    [Route("api/Transaction")]
+    [Route("api/[controller]")]
     public class TransactionController : Controller
     {
         private readonly SecureXRepository _Repo;
