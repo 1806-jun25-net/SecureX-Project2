@@ -22,11 +22,13 @@ namespace SecureXLibrary
         }
 
         //ELA async
-        public async void AddMoney(decimal deposit, Account account)
+        public async Task<Account> AddMoney(decimal deposit, Account account)
         {
             account.Funds += deposit;
             _db.Entry(await _db.Account.FindAsync(account.Id)).CurrentValues.SetValues(Mapper.Map(account));
             await _db.SaveChangesAsync();
+
+            return account;
         }
 
         public async void AuthorizeNewLocation()
@@ -35,17 +37,20 @@ namespace SecureXLibrary
         }
 
         //ELA async
-        public async void AutoPayBills(DateTime date, Transaction Transaction, Account Account )
+        public async Task<Transaction> AutoPayBills(DateTime date, Transaction Transaction, Account Account )
         {
             DateTime now = DateTime.Now;
 
-            if (date.Month == now.Month && date.Day == date.Day)
+            if (date.Month == now.Month && date.Day == now.Day)
             {
                 Account.Funds -= Transaction.TransactionAmount;
                 _db.Entry(await _db.Account.FindAsync(Account)).CurrentValues.SetValues(Mapper.Map(Account));
                 await _db.SaveChangesAsync();
 
+                return Transaction;
             }
+
+            return null;
         }
 
         //ELA async not necessary
@@ -75,7 +80,7 @@ namespace SecureXLibrary
         }
 
         //ELA async
-        public async void TransferMoney(Transaction Transaction, Account Account1, Account Account2)
+        public async Task<Transaction> TransferMoney(Transaction Transaction, Account Account1, Account Account2)
         {
             Account1.Funds -= Transaction.TransactionAmount;
             Account2.Funds += Transaction.TransactionAmount;
@@ -83,22 +88,29 @@ namespace SecureXLibrary
             _db.Entry(await _db.Account.FindAsync(Account1.Id)).CurrentValues.SetValues(Mapper.Map(Account1));
             _db.Entry(await _db.Account.FindAsync(Account2.Id)).CurrentValues.SetValues(Mapper.Map(Account2));
             await _db.SaveChangesAsync();
+
+            return Transaction;
         }
 
+
         //ELA async
-        public async void WithdrawlMoney(Transaction Transaction, Account Account)
+        public async Task<Transaction> WithdrawlMoney(Transaction Transaction, Account Account)
         {
             Account.Funds -= Transaction.TransactionAmount;
             _db.Entry(await _db.Account.FindAsync(Account.Id)).CurrentValues.SetValues(Mapper.Map(Account));
             await _db.SaveChangesAsync();
+
+            return Transaction;
         }
 
         //ELA async
-        public async void AddMoneyToReserve(Bank Bank, decimal amount)
+        public async Task<Bank> AddMoneyToReserve(Bank Bank, decimal amount)
         {
             Bank.Reserves += amount;
             _db.Entry(await _db.Account.FindAsync(Bank.Id)).CurrentValues.SetValues(Mapper.Map(Bank));
             await _db.SaveChangesAsync();
+
+            return Bank;
 
         }
 
@@ -177,21 +189,21 @@ namespace SecureXLibrary
         }
 
         //ELA async
-        public async void AddAccount(Account account)
+        public async Task AddAccount(Account account)
         {
             await _db.AddAsync(Mapper.Map(account));
             await _db.SaveChangesAsync();
         }
 
         //ELA async
-        public async void DeleteAccount(int accountId)
+        public async Task DeleteAccount(int accountId)
         {
             _db.Remove(await _db.Account.FindAsync(accountId));
             await _db.SaveChangesAsync();
         }
 
         //ELA async
-        public async void UpdateAccount(Account account)
+        public async Task UpdateAccount(Account account)
         {
             _db.Entry(await _db.Account.FindAsync(account.Id)).CurrentValues.SetValues(Mapper.Map(account));
             await _db.SaveChangesAsync();
@@ -210,7 +222,7 @@ namespace SecureXLibrary
         }
 
         //ELA async
-        public async void AddBank(Bank bank)
+        public async Task AddBank(Bank bank)
         {
             await _db.AddAsync(Mapper.Map(bank));
             await _db.SaveChangesAsync();
@@ -220,7 +232,7 @@ namespace SecureXLibrary
         //Reasoning: a bank should not need to ever be deleted
 
         //ELA async
-        public async void UpdateBank(Bank bank)
+        public async Task UpdateBank(Bank bank)
         {
             _db.Entry(_db.Bank.Find(bank.Id)).CurrentValues.SetValues(Mapper.Map(bank));
             await _db.SaveChangesAsync();
@@ -240,21 +252,21 @@ namespace SecureXLibrary
         }
 
         //ELA async
-        public async void AddCreditCard(CreditCard creditCard)
+        public async Task AddCreditCard(CreditCard creditCard)
         {
             await _db.AddAsync(Mapper.Map(creditCard));
             await _db.SaveChangesAsync();
         }
 
         //ELA async
-        public async void DeleteCreditCard(int creditCardId)
+        public async Task DeleteCreditCard(int creditCardId)
         {
             _db.Remove(_db.CreditCard.Find(creditCardId));
             await _db.SaveChangesAsync();
         }
 
         //ELA async
-        public async void UpdateCreditCard(CreditCard creditCard)
+        public async Task UpdateCreditCard(CreditCard creditCard)
         {
             _db.Entry(_db.CreditCard.Find(creditCard.Id)).CurrentValues.SetValues(Mapper.Map(creditCard));
             await _db.SaveChangesAsync();
@@ -273,21 +285,21 @@ namespace SecureXLibrary
         }
 
         //ELA async
-        public async void AddCustomer(Customer customer)
+        public async Task AddCustomer(Customer customer)
         {
             await _db.AddAsync(Mapper.Map(customer));
             await _db.SaveChangesAsync();
         }
 
         //ELA async
-        public async void DeleteCustomer(int customerId)
+        public async Task DeleteCustomer(int customerId)
         {
             _db.Remove(_db.Customer.Find(customerId));
             await _db.SaveChangesAsync();
         }
 
         //ELA async
-        public async void UpdateCustomer(Customer customer)
+        public async Task UpdateCustomer(Customer customer)
         {
             _db.Entry(_db.Customer.Find(customer.Id)).CurrentValues.SetValues(Mapper.Map(customer));
             await _db.SaveChangesAsync();
@@ -306,21 +318,21 @@ namespace SecureXLibrary
         }
 
         //ELA async
-        public async void AddEmployee(Employee employee)
+        public async Task AddEmployee(Employee employee)
         {
             await _db.AddAsync(Mapper.Map(employee));
             await _db.SaveChangesAsync();
         }
 
         //ELA async
-        public async void DeleteEmployee(int employeeId)
+        public async Task DeleteEmployee(int employeeId)
         {
             _db.Remove(_db.Employee.FindAsync(employeeId));
             await _db.SaveChangesAsync();
         }
 
         //ELA async
-        public async void UpdateEmployee(Employee employee)
+        public async Task UpdateEmployee(Employee employee)
         {
             _db.Entry(_db.Employee.FindAsync(employee.Id)).CurrentValues.SetValues(Mapper.Map(employee));
             await _db.SaveChangesAsync();
@@ -339,14 +351,14 @@ namespace SecureXLibrary
         }
 
         //ELA async
-        public async void AddTransaction(Transaction transaction)
+        public async Task AddTransaction(Transaction transaction)
         {
            await _db.AddAsync(Mapper.Map(transaction));
            await _db.SaveChangesAsync();
         }
 
         //ELA async
-        public async void DeleteTransaction(int transactionId)
+        public async Task DeleteTransaction(int transactionId)
         {
             _db.Remove(_db.Transaction.Find(transactionId));
             await _db.SaveChangesAsync();
@@ -369,28 +381,28 @@ namespace SecureXLibrary
         }
 
         //ELA async
-        public async void AddUser(User user)
+        public async Task AddUser(User user)
         {
            await _db.AddAsync(Mapper.Map(user));
            await _db.SaveChangesAsync();
         }
 
         //ELA async
-        public async void DeleteUser(int userId)
+        public async Task DeleteUser(int userId)
         {
             _db.Remove(_db.User.Find(userId));
             await _db.SaveChangesAsync();
         }
 
         //ELA async
-        public async void UpdateUser(User user)
+        public async Task UpdateUser(User user)
         {
              _db.Entry(_db.User.Find(user.Id)).CurrentValues.SetValues(Mapper.Map(user));
              await _db.SaveChangesAsync();
         }
 
         //ELA async
-        public async void Save()
+        public async Task Save()
         {
             await _db.SaveChangesAsync();
         }
