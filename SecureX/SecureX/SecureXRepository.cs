@@ -22,40 +22,11 @@ namespace SecureXLibrary
         }
 
         //ELA async
-        public async void AddMoney(decimal deposit, int id)
+        public async void AddMoney(decimal deposit, Account account)
         {
-            var accounts = _db.Account;
-
-            if (deposit != 0)
-            {
-
-                try
-                {
-                    foreach (var account in accounts)
-                    {
-                        if (account.Id == id)
-                        {
-                            account.Funds += deposit;
-                           await _db.SaveChangesAsync();
-                        }
-                    }
-                }
-
-                catch (Exception e)
-                {
-                    e.ToString();
-                }
-
-            }
-
-            else
-
-            {
-
-            Console.WriteLine("Deposit value was zero. No changes were made.");
-                    
-            }
-
+            account.Funds += deposit;
+            _db.Entry(await _db.Account.FindAsync(account.Id)).CurrentValues.SetValues(Mapper.Map(account));
+            await _db.SaveChangesAsync();
         }
 
         public async void AuthorizeNewLocation()
@@ -77,7 +48,7 @@ namespace SecureXLibrary
 
         }
 
-        //ELA
+        //ELA async not necessary
         public CreditCard CalculateDebt(Transaction Transaction, CreditCard CreditCard)
         {
 
@@ -85,6 +56,7 @@ namespace SecureXLibrary
 
         }
 
+        //ELA async not necessary
         public decimal CalculateInterest(Account account)
         {
             return account.CalculateInterest();
@@ -95,30 +67,38 @@ namespace SecureXLibrary
 
         }
 
-        public IEnumerable<Transaction> SortTransactionsByDate()
+        //ELA async
+        public async Task<IEnumerable<Transaction>> SortTransactionsByDate()
         {
-            return null;
+            return Mapper.Map(await _db.Transaction.OrderByDescending(x => x.DateOfTransaction).ToListAsync());
         }
 
-        public Transaction TransferMoney(Transaction Transaction, Account Account1, Account Account2)
+        //ELA async
+        public async void TransferMoney(Transaction Transaction, Account Account1, Account Account2)
         {
             Account1.Funds -= Transaction.TransactionAmount;
             Account2.Funds += Transaction.TransactionAmount;
-            return Transaction;
+
+            _db.Entry(await _db.Account.FindAsync(Account1.Id)).CurrentValues.SetValues(Mapper.Map(Account1));
+            _db.Entry(await _db.Account.FindAsync(Account2.Id)).CurrentValues.SetValues(Mapper.Map(Account2));
+            await _db.SaveChangesAsync();
         }
 
-        public Account WithdrawlMoney(Transaction Transaction, Account Account)
+        //ELA async
+        public async void WithdrawlMoney(Transaction Transaction, Account Account)
         {
             Account.Funds -= Transaction.TransactionAmount;
-            return Account;
-
+            _db.Entry(await _db.Account.FindAsync(Account.Id)).CurrentValues.SetValues(Mapper.Map(Account));
+            await _db.SaveChangesAsync();
         }
 
-
-        public Bank AddMoneyToReserve(Transaction Transaction, Bank Bank)
+        //ELA async
+        public async void AddMoneyToReserve(Bank Bank, decimal amount)
         {
-            Bank.Reserves += Transaction.TransactionAmount;
-            return Bank;
+            Bank.Reserves += amount;
+            _db.Entry(await _db.Account.FindAsync(Bank.Id)).CurrentValues.SetValues(Mapper.Map(Bank));
+            await _db.SaveChangesAsync();
+
         }
 
         public void ApproveUser()
@@ -132,142 +112,59 @@ namespace SecureXLibrary
         }
 
 
+        //Move to Bank class??? ELA
         public decimal CheckReserveAmount(Bank Bank)
         {
             return Bank.Reserves;
         }
 
-        //ELA
+        //ELA async not necessary
         public IEnumerable<Account> GetAccountsByUser(User User)
         {
-
             var accounts = _db.Account;
-            List<Account> UserAccounts = new List<Account>();
+            List<Account> list = new List<Account>();
 
-            try
+            foreach (var account in accounts)
             {
-                foreach(var account in accounts)
+                if (User.Id == account.Id)
                 {
-
-                    if (User.Id == account.Id)
-                    {
-                        UserAccounts.Add(Mapper.Map(account));
-                    }
-
+                    list.Add(Mapper.Map(account));
                 }
-                
             }
 
-            catch(Exception e)
-            {
-                e.ToString();
-            }
-
-            if (UserAccounts.Count == 0)
-            {
-                Console.WriteLine("Returned a null List<Account> -> 'GetAccountsByUser'");
-            }
-
-            return UserAccounts;
+            return list;
         }
 
-        //ELA
-        public Account GetAccountInformation(int id)
+        //ELA async 
+        public async Task<Account> GetAccountInformation(int id)
         {
-
-            var accounts = _db.Account;
-            try
-            {
-
-                foreach (var account in accounts)
-                {
-                    if (account.Id == id)
-                    {
-
-                        return Mapper.Map(account);
-                    }
-                }
-
-            
-
-            }
-
-            catch (Exception e)
-            {
-                e.ToString();
-            }
-
-            Console.WriteLine("Returned null -> 'GetAccountInformation'");
-            return null;
-
-
+            return Mapper.Map(await _db.Account.FirstOrDefaultAsync(x => x.Id == id));
         }
 
-        //ELA
-        public  CreditCard GetCreditInformation(int id)
+        //ELA, async
+        public async Task<CreditCard> GetCreditInformation(int id)
         {
-            var creditcards = _db.CreditCard;
-
-            try
-            {
-
-                foreach (var creditcard in creditcards)
-                {
-
-                    if (creditcard.Id == id)
-                    {
-
-                        Mapper.Map(creditcard);
-                    }
-                }
-
-            }
-
-            catch(Exception e)
-            {
-                e.ToString();
-            }
-
-            Console.WriteLine("Returned null -> 'GetCreditInformation'");
-            return null;
-
+            return Mapper.Map(await _db.CreditCard.FirstOrDefaultAsync(x => x.Id == id));
         }
 
-        //ELA
+        //ELA async not necessary
         public IEnumerable<Transaction> GetTransactionsByUser(User User)
         {
+            var Transactions = _db.Transaction;
+            List<Transaction> list = new List<Transaction>();
 
-            var transactions = _db.Transaction;
-            List<Transaction> UserTransactions = new List<Transaction>();
-
-            try
+            foreach (var transaction in Transactions)
             {
-                foreach (var transaction in transactions)
+                if (User.Id == transaction.Id)
                 {
-
-                    if (User.Id == transaction.Id)
-                    {
-                        UserTransactions.Add(Mapper.Map(transaction));
-                    }
-
+                    list.Add(Mapper.Map(transaction));
                 }
-
             }
 
-            catch (Exception e)
-            {
-                e.ToString();
-            }
-
-            if (UserTransactions.Count == 0)
-            {
-                Console.WriteLine("Returned a null List<Transaction> -> 'GetTransactionsByUser'");
-            }
-
-            return UserTransactions;
+            return list;
         }
 
-        //TODO: ELA
+        //TODO: ELA ///////////////////////////////////////////////////////////////////////
         public void LoginUsers(User User)
         {
             if (User.EmployeeId != null)
@@ -276,189 +173,229 @@ namespace SecureXLibrary
             }
         }
 
-        public IEnumerable<Account> GetAccounts()
+        //ELA async
+        public async Task<IEnumerable<Account>> GetAccounts()
         {
-            return Mapper.Map(_db.Account);
+            return Mapper.Map(await _db.Account.ToListAsync());
         }
 
-        public Account GetAccountById(int id)
+        //ELA async
+        public async Task<Account> GetAccountById(int id)
         {
-            return  Mapper.Map(_db.Account.First(x => x.Id == id));
+            return  Mapper.Map(await _db.Account.FirstOrDefaultAsync(x => x.Id == id));
         }
 
         //ELA async
         public async void AddAccount(Account account)
         {
-           await _db.AddAsync(Mapper.Map(account));
+            await _db.AddAsync(Mapper.Map(account));
+            await _db.SaveChangesAsync();
         }
 
         //ELA async
         public async void DeleteAccount(int accountId)
         {
             _db.Remove(await _db.Account.FindAsync(accountId));
+            await _db.SaveChangesAsync();
         }
 
         //ELA async
         public async void UpdateAccount(Account account)
         {
             _db.Entry(await _db.Account.FindAsync(account.Id)).CurrentValues.SetValues(Mapper.Map(account));
+            await _db.SaveChangesAsync();
         }
 
-        public IEnumerable<Bank> GetBanks()
+        //ELA async
+        public async Task<IEnumerable<Bank>> GetBanks()
         {
-            return Mapper.Map(_db.Bank);
+            return Mapper.Map(await _db.Bank.ToListAsync());
         }
 
-        public Bank GetBankById(int id)
+        //ELA async
+        public async Task<Bank> GetBankById(int id)
         {
-            return Mapper.Map(_db.Bank.First(x => x.Id == id));
+            return Mapper.Map(await _db.Bank.FirstOrDefaultAsync(x => x.Id == id));
         }
 
-        //ELA
+        //ELA async
         public async void AddBank(Bank bank)
         {
             await _db.AddAsync(Mapper.Map(bank));
+            await _db.SaveChangesAsync();
         }
 
-        public void DeleteBank(int bankId)
-        {
-            _db.Remove(_db.Bank.Find(bankId));
-        }
+        //ELA Removed 'DeleteBank' 
+        //Reasoning: a bank should not need to ever be deleted
 
-        public void UpdateBank(Bank bank)
+        //ELA async
+        public async void UpdateBank(Bank bank)
         {
             _db.Entry(_db.Bank.Find(bank.Id)).CurrentValues.SetValues(Mapper.Map(bank));
+            await _db.SaveChangesAsync();
         }
 
-        // CreditCard
-        public IEnumerable<CreditCard> GetCreditCards()
+        //ELA async
+        public async Task<IEnumerable<CreditCard>> GetCreditCards()
         {
-            return Mapper.Map(_db.CreditCard);
+            return Mapper.Map(await _db.CreditCard.ToListAsync());
         }
 
-        public CreditCard GetCreditCardById(int id)
+
+        //ELA async
+        public async Task<CreditCard> GetCreditCardById(int id)
         {
-            return Mapper.Map(_db.CreditCard.First(x => x.Id == id));
+            return Mapper.Map(await _db.CreditCard.FirstOrDefaultAsync(x => x.Id == id));
         }
 
         //ELA async
         public async void AddCreditCard(CreditCard creditCard)
         {
-           await _db.AddAsync(Mapper.Map(creditCard));
+            await _db.AddAsync(Mapper.Map(creditCard));
+            await _db.SaveChangesAsync();
         }
 
-        public void DeleteCreditCard(int creditCardId)
+        //ELA async
+        public async void DeleteCreditCard(int creditCardId)
         {
             _db.Remove(_db.CreditCard.Find(creditCardId));
+            await _db.SaveChangesAsync();
         }
 
-        public void UpdateCreditCard(CreditCard creditCard)
+        //ELA async
+        public async void UpdateCreditCard(CreditCard creditCard)
         {
             _db.Entry(_db.CreditCard.Find(creditCard.Id)).CurrentValues.SetValues(Mapper.Map(creditCard));
+            await _db.SaveChangesAsync();
         }
 
-        public IEnumerable<Customer> GetCustomers()
+        //ELA async
+        public async Task<IEnumerable<Customer>> GetCustomers()
         {
-            return Mapper.Map(_db.Customer);
+            return Mapper.Map(await _db.Customer.ToListAsync());
         }
 
-        public Customer GetCustomerById(int id)
+        //ELA async
+        public async Task<Customer> GetCustomerById(int id)
         {
-            return Mapper.Map(_db.Customer.First(x => x.Id == id));
+            return Mapper.Map(await _db.Customer.FirstOrDefaultAsync(x => x.Id == id));
         }
 
         //ELA async
         public async void AddCustomer(Customer customer)
         {
-           await _db.AddAsync(Mapper.Map(customer));
+            await _db.AddAsync(Mapper.Map(customer));
+            await _db.SaveChangesAsync();
         }
 
-        public void DeleteCustomer(int customerId)
+        //ELA async
+        public async void DeleteCustomer(int customerId)
         {
             _db.Remove(_db.Customer.Find(customerId));
+            await _db.SaveChangesAsync();
         }
 
-        public void UpdateCustomer(Customer customer)
+        //ELA async
+        public async void UpdateCustomer(Customer customer)
         {
             _db.Entry(_db.Customer.Find(customer.Id)).CurrentValues.SetValues(Mapper.Map(customer));
+            await _db.SaveChangesAsync();
         }
 
-        public IEnumerable<Employee> GetEmployees()
+        //ELA async
+        public async Task<IEnumerable<Employee>> GetEmployees()
         {
-            return Mapper.Map(_db.Employee);
+            return Mapper.Map(await _db.Employee.ToListAsync());
         }
 
-        public Employee GetEmployeeById(int id)
+        //ELA async
+        public async Task<Employee> GetEmployeeById(int id)
         {
-            return Mapper.Map(_db.Employee.First(x => x.Id == id));
+            return Mapper.Map(await _db.Employee.FirstOrDefaultAsync(x => x.Id == id));
         }
 
         //ELA async
         public async void AddEmployee(Employee employee)
         {
-           await _db.AddAsync(Mapper.Map(employee));
+            await _db.AddAsync(Mapper.Map(employee));
+            await _db.SaveChangesAsync();
         }
 
-        public void DeleteEmployee(int employeeId)
+        //ELA async
+        public async void DeleteEmployee(int employeeId)
         {
-            _db.Remove(_db.Employee.Find(employeeId));
+            _db.Remove(_db.Employee.FindAsync(employeeId));
+            await _db.SaveChangesAsync();
         }
 
-        public void UpdateEmployee(Employee employee)
+        //ELA async
+        public async void UpdateEmployee(Employee employee)
         {
-            _db.Entry(_db.Employee.Find(employee.Id)).CurrentValues.SetValues(Mapper.Map(employee));
+            _db.Entry(_db.Employee.FindAsync(employee.Id)).CurrentValues.SetValues(Mapper.Map(employee));
+            await _db.SaveChangesAsync();
         }
 
-        public IEnumerable<Transaction> GetTransactions()
+        //ELA async
+        public async Task<IEnumerable<Transaction>> GetTransactions()
         {
-            return Mapper.Map(_db.Transaction);
+            return Mapper.Map(await _db.Transaction.ToListAsync());
         }
 
+        //ELA async
         public async Task<Transaction> GetTransactionById(int id)
         {
-            return Mapper.Map(_db.Transaction.First(x => x.Id == id));
+            return Mapper.Map(await _db.Transaction.FirstOrDefaultAsync(x => x.Id == id));
         }
 
         //ELA async
         public async void AddTransaction(Transaction transaction)
         {
            await _db.AddAsync(Mapper.Map(transaction));
+           await _db.SaveChangesAsync();
         }
 
-        public void DeleteTransaction(int transactionId)
+        //ELA async
+        public async void DeleteTransaction(int transactionId)
         {
             _db.Remove(_db.Transaction.Find(transactionId));
+            await _db.SaveChangesAsync();
         }
 
-        public void UpdateTransaction(Transaction transaction)
+        //ELA
+        //Removed UpdateTransaction
+        //Reasoning: transactions should not be mutable for security purposes
+        
+        //ELA async
+        public async Task<IEnumerable<User>> GetUsers()
         {
-            _db.Entry(_db.Transaction.Find(transaction.Id)).CurrentValues.SetValues(Mapper.Map(transaction));
+            return Mapper.Map(await _db.User.ToListAsync());
         }
 
-        public IEnumerable<User> GetUsers()
+        //ELA async
+        public async Task<User> GetUserById(int id)
         {
-            return Mapper.Map(_db.User);
-        }
-
-        public User GetUserById(int id)
-        {
-            return Mapper.Map(_db.User.First(x => x.Id == id));
+            return Mapper.Map(await _db.User.FirstOrDefaultAsync(x => x.Id == id));
         }
 
         //ELA async
         public async void AddUser(User user)
         {
            await _db.AddAsync(Mapper.Map(user));
+           await _db.SaveChangesAsync();
         }
 
-        public  void DeleteUser(int userId)
+        //ELA async
+        public async void DeleteUser(int userId)
         {
             _db.Remove(_db.User.Find(userId));
+            await _db.SaveChangesAsync();
         }
 
-        public void UpdateUser(User user)
+        //ELA async
+        public async void UpdateUser(User user)
         {
-            _db.Entry(_db.User.Find(user.Id)).CurrentValues.SetValues(Mapper.Map(user));
+             _db.Entry(_db.User.Find(user.Id)).CurrentValues.SetValues(Mapper.Map(user));
+             await _db.SaveChangesAsync();
         }
 
         //ELA async
