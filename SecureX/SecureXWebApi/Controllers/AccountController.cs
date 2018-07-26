@@ -22,10 +22,6 @@ namespace SecureXWebApi.Controllers
             _Repo = Repo;
         }
         
-        
-        
-        
-        
         // GET: api/<controller>
         [HttpGet]
         public async Task<ActionResult> GetAll()
@@ -65,24 +61,28 @@ namespace SecureXWebApi.Controllers
 
         // PUT api/<controller>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, Account account)
+        public async Task<IActionResult> Update(string type , Account account)
         {
-            var selectAcc = _Repo.GetAccountById(id);
-            if(selectAcc == null)
+            Account selectAcc = await _Repo.GetAccountById(account.Id);
+            
+
+            if (selectAcc == null)
             {
                 return NotFound();
             }
+
+            selectAcc.AccountType = type;
             selectAcc.AccountType = account.AccountType;
-            await _Repo.Save();
+            _Repo.Save();
 
             return NoContent();
         }
 
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var selectAcc = _Repo.GetAccountById(id);
+            Account selectAcc = await _Repo.GetAccountById(id);
             if(selectAcc == null)
             {
                 return NotFound();

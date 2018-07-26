@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SecureXLibrary;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -11,36 +14,64 @@ namespace SecureXWebApi.Controllers
     [Route("api/CreditCard")]
     public class CreditCardController : Controller
     {
+        private readonly SecureXRepository _Repo;
+
+        public CreditCardController(SecureXRepository Repo)
+        {
+            _Repo = Repo;
+        }
+
         // GET: api/<controller>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<ActionResult> GetAll()
         {
-            return new string[] { "value1", "value2" };
+            var cclist = await _Repo.GetCreditCards();
+            return Ok(cclist);
         }
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<ActionResult<Account>> GetById(int x)
         {
-            return "value";
+            if (!ModelState.IsValid)
+            {
+                return NotFound();
+            }
+            try
+            {
+                var creditc = await _Repo.GetCreditCardById(x);
+                return Ok(creditc);
+            }
+            catch (DbUpdateException ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         // POST api/<controller>
         [HttpPost]
-        public void Post([FromBody]string value)
+        public IActionResult Create(CreditCard cc)
         {
-        }
+            _Repo.AddCreditCard(cc);
+            _Repo.Save();
 
-        // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
+            return CreatedAtRoute("Get CreditCard", new { id = cc.Id }, cc);
         }
 
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            CreditCard cc = await _Repo.GetCreditCardById(id);
+            if (cc == null)
+            {
+                return NotFound();
+            }
+
+            _Repo.DeleteCreditCard(id);
+            _Repo.Save();
+
+            return NoContent();
         }
     }
 }

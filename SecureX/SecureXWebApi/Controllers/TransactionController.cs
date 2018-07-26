@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SecureXLibrary;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -11,36 +14,48 @@ namespace SecureXWebApi.Controllers
     [Route("api/Transaction")]
     public class TransactionController : Controller
     {
+        private readonly SecureXRepository _Repo;
+
+        public TransactionController(SecureXRepository Repo)
+        {
+            _Repo = Repo;
+        }
+
         // GET: api/<controller>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<ActionResult> GetAll()
         {
-            return new string[] { "value1", "value2" };
+            var tranlist = await _Repo.GetTransactions();
+            return Ok(tranlist);
         }
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<ActionResult<Account>> GetById(int x)
         {
-            return "value";
+            if (!ModelState.IsValid)
+            {
+                return NotFound();
+            }
+            try
+            {
+                var tran = await _Repo.GetTransactionById(x);
+                return Ok(tran);
+            }
+            catch (DbUpdateException ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         // POST api/<controller>
         [HttpPost]
-        public void Post([FromBody]string value)
+        public IActionResult Create(Transaction tran)
         {
-        }
+            _Repo.AddTransaction(tran);
+            _Repo.Save();
 
-        // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            return CreatedAtRoute("Get Transaction", new { id = tran.Id }, tran);
         }
     }
 }
