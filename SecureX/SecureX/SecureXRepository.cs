@@ -34,18 +34,18 @@ namespace SecureXLibrary
             //await
         }
 
-        public Transaction AutoPayBills(DateTime date, Transaction Transaction, Account Account )
+        //ELA async
+        public async void AutoPayBills(DateTime date, Transaction Transaction, Account Account )
         {
             DateTime now = DateTime.Now;
 
             if (date.Month == now.Month && date.Day == date.Day)
             {
                 Account.Funds -= Transaction.TransactionAmount;
-                return Transaction;
+                _db.Entry(await _db.Account.FindAsync(Account)).CurrentValues.SetValues(Mapper.Map(Account));
+                await _db.SaveChangesAsync();
+
             }
-
-            return null;
-
         }
 
         //ELA async not necessary
@@ -62,9 +62,10 @@ namespace SecureXLibrary
             return account.CalculateInterest();
         }
 
-        public void ChangeUserLocation()
-        {
-
+        public async void ChangeCustomerLocation(Customer Customer, Bank Bank)
+        {   
+            Customer.City = Bank.City;
+            _db.Entry(await _db.Account.FindAsync(Customer.Id)).CurrentValues.SetValues(Mapper.Map(Customer));
         }
 
         //ELA async
@@ -98,16 +99,6 @@ namespace SecureXLibrary
             Bank.Reserves += amount;
             _db.Entry(await _db.Account.FindAsync(Bank.Id)).CurrentValues.SetValues(Mapper.Map(Bank));
             await _db.SaveChangesAsync();
-
-        }
-
-        public void ApproveUser()
-        {
-
-        }
-
-        public void BlockUser()
-        {
 
         }
 
