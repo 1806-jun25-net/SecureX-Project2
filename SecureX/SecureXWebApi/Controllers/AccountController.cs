@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ namespace SecureXWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize]
     public class AccountController : Controller
     {
         private readonly SecureXRepository _Repo;
@@ -82,6 +84,7 @@ namespace SecureXWebApi.Controllers
 
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
+        //[Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int id)
         {
             Account selectAcc = await _Repo.GetAccountById(id);
