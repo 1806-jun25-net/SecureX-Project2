@@ -57,7 +57,7 @@ namespace SecureXWebApi.Controllers
             await _Repo.AddTransaction(tran);
             await _Repo.Save();
 
-            return CreatedAtRoute("Get Transaction", new { id = tran.Id }, tran);
+            return NoContent();
         }
     }
 }

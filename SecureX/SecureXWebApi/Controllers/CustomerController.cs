@@ -57,7 +57,7 @@ namespace SecureXWebApi.Controllers
             await _Repo.AddCustomer(customer);
             await _Repo.Save();
 
-            return CreatedAtRoute("Get Account", new { id = customer.Id }, customer);
+            return NoContent();
         }
 
         // PUT api/<controller>/5

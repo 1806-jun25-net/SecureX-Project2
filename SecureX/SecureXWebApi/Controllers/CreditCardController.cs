@@ -57,7 +57,7 @@ namespace SecureXWebApi.Controllers
             await _Repo.AddCreditCard(cc);
             await _Repo.Save();
 
-            return CreatedAtRoute("Get CreditCard", new { id = cc.Id }, cc);
+            return NoContent();
         }
 
         // DELETE api/<controller>/5

@@ -60,7 +60,7 @@ namespace SecureXWebApi.Controllers
             await IRepo.AddAccount(account);
             await IRepo.Save();
 
-            return CreatedAtRoute("Get Account", new { id = account.Id }, account);
+            return NoContent();
         }
 
         // PUT api/<controller>/5
