@@ -83,7 +83,7 @@ namespace SecureXWebApi
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
 
-            services.AddScoped<ISecureXRepository, ISecureXRepository>();
+            services.AddScoped<ISecureXRepository, SecureXRepository>();
             services.AddScoped<SecureXLibrary.SecureXRepository>();
 
             services.AddSwaggerGen(c =>
