@@ -104,9 +104,11 @@ namespace SecureXWebApi
 
             app.UseSwagger();
 
+            var swaggerPath = "/swagger/v1/swagger.json";
+
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.SwaggerEndpoint(swaggerPath, "My API V1");
             });
 
             app.UseHttpsRedirection();
