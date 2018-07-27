@@ -45,7 +45,7 @@ namespace SecureXWebApi.Controllers
                 var bank = await _Repo.GetBankById(x);
                 return Ok(bank);
             }
-            catch(DbUpdateException ex)
+            catch(DbUpdateException)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
@@ -53,10 +53,10 @@ namespace SecureXWebApi.Controllers
 
         // POST api/<controller>
         [HttpPost]
-        public IActionResult Create(Bank bank)
+        public async Task<IActionResult> Create(Bank bank)
         {
-            _Repo.AddBank(bank);
-            _Repo.Save();
+            await _Repo.AddBank(bank);
+            await _Repo.Save();
 
             return CreatedAtRoute("Get Bank", new { id = bank.Id }, bank);
         }
@@ -74,7 +74,7 @@ namespace SecureXWebApi.Controllers
 
             selectBank.Reserves = amt;
             selectBank.Reserves = bank.Reserves;
-            _Repo.Save();
+            await _Repo.Save();
 
             return NoContent();
         }

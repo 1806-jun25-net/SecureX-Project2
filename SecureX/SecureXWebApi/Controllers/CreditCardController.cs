@@ -44,7 +44,7 @@ namespace SecureXWebApi.Controllers
                 var creditc = await _Repo.GetCreditCardById(x);
                 return Ok(creditc);
             }
-            catch (DbUpdateException ex)
+            catch (DbUpdateException)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
@@ -52,10 +52,10 @@ namespace SecureXWebApi.Controllers
 
         // POST api/<controller>
         [HttpPost]
-        public IActionResult Create(CreditCard cc)
+        public async Task<IActionResult> Create(CreditCard cc)
         {
-            _Repo.AddCreditCard(cc);
-            _Repo.Save();
+            await _Repo.AddCreditCard(cc);
+            await _Repo.Save();
 
             return CreatedAtRoute("Get CreditCard", new { id = cc.Id }, cc);
         }
@@ -70,8 +70,8 @@ namespace SecureXWebApi.Controllers
                 return NotFound();
             }
 
-            _Repo.DeleteCreditCard(id);
-            _Repo.Save();
+            await _Repo.DeleteCreditCard(id);
+            await _Repo.Save();
 
             return NoContent();
         }

@@ -44,7 +44,7 @@ namespace SecureXWebApi.Controllers
                 var employ = await _Repo.GetEmployeeById(x);
                 return Ok(employ);
             }
-            catch (DbUpdateException ex)
+            catch (DbUpdateException)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
@@ -52,10 +52,10 @@ namespace SecureXWebApi.Controllers
 
         // POST api/<controller>
         [HttpPost]
-        public IActionResult Create(Employee employee)
+        public async Task<IActionResult> Create(Employee employee)
         {
-            _Repo.AddEmployee(employee);
-            _Repo.Save();
+            await _Repo.AddEmployee(employee);
+            await _Repo.Save();
 
             return CreatedAtRoute("Get Employee", new { id = employee.Id }, employee);
         }
@@ -74,7 +74,7 @@ namespace SecureXWebApi.Controllers
 
             selectemploy.BankId = bank;
             selectemploy.BankId = employee.BankId;
-            _Repo.Save();
+            await _Repo.Save();
 
             return NoContent();
         }
@@ -89,8 +89,8 @@ namespace SecureXWebApi.Controllers
                 return NotFound();
             }
 
-            _Repo.DeleteEmployee(id);
-            _Repo.Save();
+            await _Repo.DeleteEmployee(id);
+            await _Repo.Save();
 
             return NoContent();
         }

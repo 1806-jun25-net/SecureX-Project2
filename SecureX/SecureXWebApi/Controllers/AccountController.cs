@@ -46,7 +46,7 @@ namespace SecureXWebApi.Controllers
                 var account = await _Repo.GetAccountById(id);
                 return Ok(account);
             }
-            catch (DbUpdateException ex)
+            catch (DbUpdateException)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
@@ -54,11 +54,11 @@ namespace SecureXWebApi.Controllers
 
         // POST api/<controller>
         [HttpPost]
-        public IActionResult Create([FromBody]Account account)
+        public async Task<IActionResult> Create([FromBody]Account account)
         {
             account.Id = 0;
-            _Repo.AddAccount(account);
-            _Repo.Save();
+            await _Repo.AddAccount(account);
+            await _Repo.Save();
 
             return CreatedAtRoute("Get Account", new { id = account.Id }, account);
         }
@@ -77,7 +77,7 @@ namespace SecureXWebApi.Controllers
 
             selectAcc.AccountType = type;
             selectAcc.AccountType = account.AccountType;
-            _Repo.Save();
+            await _Repo.Save();
 
             return NoContent();
         }
@@ -93,8 +93,8 @@ namespace SecureXWebApi.Controllers
                 return NotFound();
             }
 
-            _Repo.DeleteAccount(id);
-            _Repo.Save();
+            await _Repo.DeleteAccount(id);
+            await _Repo.Save();
 
             return NoContent();
         }
