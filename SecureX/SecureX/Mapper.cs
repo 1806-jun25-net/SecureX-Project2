@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SecureXLibrary
 {
-    class Mapper
+    public class Mapper
     {
         public static Account Map(SecureXContext.Account account) => new Account
         {
