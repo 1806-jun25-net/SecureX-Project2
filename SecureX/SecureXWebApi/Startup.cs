@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SecureXContext;
+using SecureXLibrary;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace SecureXWebApi
@@ -80,6 +81,8 @@ namespace SecureXWebApi
                 .AddXmlSerializerFormatters()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+
+            services.AddScoped<ISecureXRepository, ISecureXRepository>();
             services.AddScoped<SecureXLibrary.SecureXRepository>();
 
             services.AddSwaggerGen(c =>

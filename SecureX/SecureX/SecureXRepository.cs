@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SecureXLibrary
 {
-    public class SecureXRepository
+    public class SecureXRepository : ISecureXRepository
     {
         private readonly SecureXdbContext _db;
 
@@ -17,9 +17,6 @@ namespace SecureXLibrary
             _db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
-        public SecureXRepository()
-        {
-        }
 
         //ELA async
         public async Task<Account> AddMoney(decimal deposit, Account account)
@@ -31,10 +28,10 @@ namespace SecureXLibrary
             return account;
         }
 
-        public async Task AuthorizeNewLocation()
-        {
-            //await
-        }
+        //public async Task AuthorizeNewLocation()
+        //{
+        //    //await
+        //}
 
         //ELA async
         public async Task<Transaction> AutoPayBills(DateTime date, Transaction Transaction, Account Account )
