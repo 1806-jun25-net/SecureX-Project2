@@ -58,6 +58,7 @@ namespace SecureXWebApi
 
             services.ConfigureApplicationCookie(options =>
             {
+                options.Cookie.Name = "SecureXApiAuth";
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
                 options.Events = new CookieAuthenticationEvents
                 {
