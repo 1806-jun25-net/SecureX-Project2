@@ -10,7 +10,7 @@ namespace SecureXLibrary
         public decimal Reserves { get; set; }
         public string City { get; set; }
 
-        private decimal MinimumReserves = 1500000.00m;
+        private readonly decimal MinimumReserves = 1500000.00m;
 
         // methods
         public bool NotOverdraw(decimal amount)
