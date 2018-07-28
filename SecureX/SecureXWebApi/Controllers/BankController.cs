@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ namespace SecureXWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize]
     public class BankController : Controller
     {
         private readonly SecureXRepository _Repo;
@@ -43,7 +45,7 @@ namespace SecureXWebApi.Controllers
                 var bank = await _Repo.GetBankById(x);
                 return Ok(bank);
             }
-            catch(DbUpdateException ex)
+            catch(DbUpdateException)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
@@ -51,12 +53,12 @@ namespace SecureXWebApi.Controllers
 
         // POST api/<controller>
         [HttpPost]
-        public IActionResult Create(Bank bank)
+        public async Task<IActionResult> Create(Bank bank)
         {
-            _Repo.AddBank(bank);
-            _Repo.Save();
+            await _Repo.AddBank(bank);
+            await _Repo.Save();
 
-            return CreatedAtRoute("Get Bank", new { id = bank.Id }, bank);
+            return NoContent();
         }
 
         // PUT api/<controller>/5
@@ -72,7 +74,7 @@ namespace SecureXWebApi.Controllers
 
             selectBank.Reserves = amt;
             selectBank.Reserves = bank.Reserves;
-            _Repo.Save();
+            await _Repo.Save();
 
             return NoContent();
         }

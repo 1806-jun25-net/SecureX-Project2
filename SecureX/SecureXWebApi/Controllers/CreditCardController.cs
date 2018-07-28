@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using SecureXLibrary;
 
 namespace SecureXWebApi.Controllers
 {
+    //[Authorize]
     [Route("api/[controller]")]
     public class CreditCardController : Controller
     {
@@ -42,7 +44,7 @@ namespace SecureXWebApi.Controllers
                 var creditc = await _Repo.GetCreditCardById(x);
                 return Ok(creditc);
             }
-            catch (DbUpdateException ex)
+            catch (DbUpdateException)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
@@ -50,12 +52,12 @@ namespace SecureXWebApi.Controllers
 
         // POST api/<controller>
         [HttpPost]
-        public IActionResult Create(CreditCard cc)
+        public async Task<IActionResult> Create(CreditCard cc)
         {
-            _Repo.AddCreditCard(cc);
-            _Repo.Save();
+            await _Repo.AddCreditCard(cc);
+            await _Repo.Save();
 
-            return CreatedAtRoute("Get CreditCard", new { id = cc.Id }, cc);
+            return NoContent();
         }
 
         // DELETE api/<controller>/5
@@ -68,8 +70,8 @@ namespace SecureXWebApi.Controllers
                 return NotFound();
             }
 
-            _Repo.DeleteCreditCard(id);
-            _Repo.Save();
+            await _Repo.DeleteCreditCard(id);
+            await _Repo.Save();
 
             return NoContent();
         }

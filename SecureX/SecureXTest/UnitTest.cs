@@ -7,8 +7,6 @@ namespace SecureXTest
 {
     public class UnitTest
     {
-        private readonly SecureXRepository sx = new SecureXRepository();
-
         private readonly Transaction transact1pos = new Transaction("Carl", DateTime.Now, 500.00m);
         private readonly Transaction transact1neg = new Transaction("Mano", DateTime.Now, -20.00m);
         private readonly CreditCard credit1debt = new CreditCard(500m, 200.00m, 234563);

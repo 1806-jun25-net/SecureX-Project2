@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using SecureXLibrary;
 
 namespace SecureXWebApi.Controllers
 {
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : Controller
@@ -43,7 +45,7 @@ namespace SecureXWebApi.Controllers
                 var user = await _Repo.GetUserById(x);
                 return Ok(user);
             }
-            catch(DbUpdateException ex)
+            catch(DbUpdateException)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
@@ -51,12 +53,12 @@ namespace SecureXWebApi.Controllers
 
         // POST api/<controller>
         [HttpPost]
-        public IActionResult Create(User user)
+        public async Task<IActionResult> Create(User user)
         {
-            _Repo.AddUser(user);
-            _Repo.Save();
+            await _Repo.AddUser(user);
+            await _Repo.Save();
 
-            return CreatedAtRoute("Get User", new { id = user.Id }, user);
+            return NoContent();
         }
 
         // PUT api/<controller>/5
@@ -72,7 +74,7 @@ namespace SecureXWebApi.Controllers
 
             selectUser.Password = password;
             selectUser.Password = user.Password;
-            _Repo.Save();
+            await _Repo.Save();
 
             return NoContent();
         }
@@ -87,8 +89,8 @@ namespace SecureXWebApi.Controllers
                 return NotFound();
             }
 
-            _Repo.DeleteUser(id);
-            _Repo.Save();
+            await _Repo.DeleteUser(id);
+            await _Repo.Save();
 
             return NoContent();
         }

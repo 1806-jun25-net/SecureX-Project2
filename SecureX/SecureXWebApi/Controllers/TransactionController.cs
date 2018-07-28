@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using SecureXLibrary;
 
 namespace SecureXWebApi.Controllers
 {
+    //[Authorize]
     [Route("api/[controller]")]
     public class TransactionController : Controller
     {
@@ -42,7 +44,7 @@ namespace SecureXWebApi.Controllers
                 var tran = await _Repo.GetTransactionById(x);
                 return Ok(tran);
             }
-            catch (DbUpdateException ex)
+            catch (DbUpdateException)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
@@ -50,12 +52,12 @@ namespace SecureXWebApi.Controllers
 
         // POST api/<controller>
         [HttpPost]
-        public IActionResult Create(Transaction tran)
+        public async Task<IActionResult> Create(Transaction tran)
         {
-            _Repo.AddTransaction(tran);
-            _Repo.Save();
+            await _Repo.AddTransaction(tran);
+            await _Repo.Save();
 
-            return CreatedAtRoute("Get Transaction", new { id = tran.Id }, tran);
+            return NoContent();
         }
     }
 }
