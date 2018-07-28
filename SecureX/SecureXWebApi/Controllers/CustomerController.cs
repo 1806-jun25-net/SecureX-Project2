@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using SecureXLibrary;
 
 namespace SecureXWebApi.Controllers
 {
+    //[Authorize]
     [Route("api/[controller]")]
     public class CustomerController : Controller
     {
@@ -42,7 +44,7 @@ namespace SecureXWebApi.Controllers
                 var customer = await _Repo.GetCustomerById(x);
                 return Ok(customer);
             }
-            catch (DbUpdateException ex)
+            catch (DbUpdateException)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
@@ -50,12 +52,12 @@ namespace SecureXWebApi.Controllers
 
         // POST api/<controller>
         [HttpPost]
-        public IActionResult Create(Customer customer)
+        public async Task<IActionResult> Create(Customer customer)
         {
-            _Repo.AddCustomer(customer);
-            _Repo.Save();
+            await _Repo.AddCustomer(customer);
+            await _Repo.Save();
 
-            return CreatedAtRoute("Get Account", new { id = customer.Id }, customer);
+            return NoContent();
         }
 
         // PUT api/<controller>/5
@@ -72,7 +74,7 @@ namespace SecureXWebApi.Controllers
 
             selectcust.PhoneNumber = phone;
             selectcust.PhoneNumber = customer.PhoneNumber;
-            _Repo.Save();
+            await _Repo.Save();
 
             return NoContent();
         }
@@ -87,8 +89,8 @@ namespace SecureXWebApi.Controllers
                 return NotFound();
             }
 
-            _Repo.DeleteCustomer(id);
-            _Repo.Save();
+            await _Repo.DeleteCustomer(id);
+            await _Repo.Save();
 
             return NoContent();
         }
