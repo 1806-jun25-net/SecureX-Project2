@@ -16,24 +16,25 @@ namespace SecureXWebApi.Controllers
     [Route("api/[controller]")]
     public class CreditCardController : Controller
     {
-        private readonly SecureXRepository _Repo;
+        private readonly ISecureXRepository IRepo;
 
-        public CreditCardController(SecureXRepository Repo)
+        public CreditCardController(ISecureXRepository Repo)
         {
-            _Repo = Repo;
+            IRepo = Repo;
         }
 
         // GET: api/<controller>
         [HttpGet]
         public async Task<ActionResult> GetAll()
         {
-            var cclist = await _Repo.GetCreditCards();
+            var cclist = await IRepo.GetCreditCards();
             return Ok(cclist);
         }
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Account>> GetById(int x)
+        [FormatFilter]
+        public async Task<ActionResult<CreditCard>> GetById(int x)
         {
             if (!ModelState.IsValid)
             {
@@ -41,8 +42,8 @@ namespace SecureXWebApi.Controllers
             }
             try
             {
-                var creditc = await _Repo.GetCreditCardById(x);
-                return Ok(creditc);
+                var creditc = await IRepo.GetCreditCardById(x);
+                return creditc;
             }
             catch (DbUpdateException)
             {
@@ -52,10 +53,11 @@ namespace SecureXWebApi.Controllers
 
         // POST api/<controller>
         [HttpPost]
-        public async Task<IActionResult> Create(CreditCard cc)
+        public async Task<IActionResult> Create([FromBody] CreditCard cc)
         {
-            await _Repo.AddCreditCard(cc);
-            await _Repo.Save();
+            cc.Id = 0;
+            await IRepo.AddCreditCard(cc);
+            await IRepo.Save();
 
             return NoContent();
         }
@@ -64,14 +66,14 @@ namespace SecureXWebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            CreditCard cc = await _Repo.GetCreditCardById(id);
+            CreditCard cc = await IRepo.GetCreditCardById(id);
             if (cc == null)
             {
                 return NotFound();
             }
 
-            await _Repo.DeleteCreditCard(id);
-            await _Repo.Save();
+            await IRepo.DeleteCreditCard(id);
+            await IRepo.Save();
 
             return NoContent();
         }

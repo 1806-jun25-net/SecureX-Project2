@@ -16,23 +16,24 @@ namespace SecureXWebApi.Controllers
     [Route("api/[controller]")]
     public class EmployeeController : Controller
     {
-        private readonly SecureXRepository _Repo;
+        private readonly ISecureXRepository IRepo;
 
-        public EmployeeController(SecureXRepository Repo)
+        public EmployeeController(ISecureXRepository Repo)
         {
-            _Repo = Repo;
+            IRepo = Repo;
         }
 
         // GET: api/<controller>
         [HttpGet]
         public async Task<ActionResult> GetAll()
         {
-            var employlist = await _Repo.GetEmployees();
+            var employlist = await IRepo.GetEmployees();
             return Ok(employlist);
         }
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
+        [FormatFilter]
         public async Task<ActionResult<Employee>> GetById(int x)
         {
             if (!ModelState.IsValid)
@@ -41,8 +42,8 @@ namespace SecureXWebApi.Controllers
             }
             try
             {
-                var employ = await _Repo.GetEmployeeById(x);
-                return Ok(employ);
+                var employ = await IRepo.GetEmployeeById(x);
+                return employ;
             }
             catch (DbUpdateException)
             {
@@ -52,19 +53,20 @@ namespace SecureXWebApi.Controllers
 
         // POST api/<controller>
         [HttpPost]
-        public async Task<IActionResult> Create(Employee employee)
+        public async Task<IActionResult> Create([FromBody] Employee employee)
         {
-            await _Repo.AddEmployee(employee);
-            await _Repo.Save();
+            employee.Id = 0;
+            await IRepo.AddEmployee(employee);
+            await IRepo.Save();
 
             return NoContent();
         }
 
         // PUT api/<controller>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int bank, Employee employee)
+        public async Task<IActionResult> Update(int id, [FromBody]int bank, Employee employee)
         {
-            Employee selectemploy = await _Repo.GetEmployeeById(employee.Id);
+            Employee selectemploy = await IRepo.GetEmployeeById(employee.Id);
 
 
             if (selectemploy == null)
@@ -74,7 +76,7 @@ namespace SecureXWebApi.Controllers
 
             selectemploy.BankId = bank;
             selectemploy.BankId = employee.BankId;
-            await _Repo.Save();
+            await IRepo.Save();
 
             return NoContent();
         }
@@ -83,14 +85,14 @@ namespace SecureXWebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            Employee selectemploy = await _Repo.GetEmployeeById(id);
+            Employee selectemploy = await IRepo.GetEmployeeById(id);
             if (selectemploy == null)
             {
                 return NotFound();
             }
 
-            await _Repo.DeleteEmployee(id);
-            await _Repo.Save();
+            await IRepo.DeleteEmployee(id);
+            await IRepo.Save();
 
             return NoContent();
         }
