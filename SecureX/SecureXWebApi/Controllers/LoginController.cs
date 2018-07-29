@@ -8,8 +8,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SecureXLibrary;
+using SecureXWebApi.Models;
 
-namespace TodoApi2.Controllers
+namespace SecureXWebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
@@ -25,7 +26,7 @@ namespace TodoApi2.Controllers
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(403)]
-        public async Task<ActionResult> Login(User input)
+        public async Task<ActionResult> Login(Login input)
         {
             var result = await _signInManager.PasswordSignInAsync(input.UserName, input.Password,
                 isPersistent: false, lockoutOnFailure: false);
@@ -50,7 +51,7 @@ namespace TodoApi2.Controllers
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult> Register(User input,
+        public async Task<ActionResult> Register(Login input,
             [FromServices] UserManager<IdentityUser> userManager,
             [FromServices] RoleManager<IdentityRole> roleManager, bool admin = false)
         {
