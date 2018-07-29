@@ -17,23 +17,24 @@ namespace SecureXWebApi.Controllers
     [ApiController]
     public class UserController : Controller
     {
-        private readonly SecureXRepository _Repo;
+        private readonly ISecureXRepository IRepo;
 
-        public UserController(SecureXRepository Repo)
+        public UserController(ISecureXRepository Repo)
         {
-            _Repo = Repo;
+            IRepo = Repo;
         }
 
         // GET: api/<controller>
         [HttpGet]
         public async Task<ActionResult> GetAll()
         {
-            var userlist = await _Repo.GetUsers();
+            var userlist = await IRepo.GetUsers();
             return Ok(userlist);
         }
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
+        [FormatFilter]
         public async Task<ActionResult<User>> GetById(int x)
         {
             if(!ModelState.IsValid)
@@ -42,8 +43,8 @@ namespace SecureXWebApi.Controllers
             }
             try
             {
-                var user = await _Repo.GetUserById(x);
-                return Ok(user);
+                var user = await IRepo.GetUserById(x);
+                return user;
             }
             catch(DbUpdateException)
             {
@@ -53,19 +54,20 @@ namespace SecureXWebApi.Controllers
 
         // POST api/<controller>
         [HttpPost]
-        public async Task<IActionResult> Create(User user)
+        public async Task<IActionResult> Create([FromBody]User user)
         {
-            await _Repo.AddUser(user);
-            await _Repo.Save();
+            user.Id = 0;
+            await IRepo.AddUser(user);
+            await IRepo.Save();
 
             return NoContent();
         }
 
         // PUT api/<controller>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(String password, User user)
+        public async Task<IActionResult> Update(int id, [FromBody]String password, User user)
         {
-            User selectUser = await _Repo.GetUserById(user.Id);
+            User selectUser = await IRepo.GetUserById(user.Id);
 
             if(selectUser == null)
             {
@@ -74,7 +76,7 @@ namespace SecureXWebApi.Controllers
 
             selectUser.Password = password;
             selectUser.Password = user.Password;
-            await _Repo.Save();
+            await IRepo.Save();
 
             return NoContent();
         }
@@ -83,14 +85,14 @@ namespace SecureXWebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            User selectUser = await _Repo.GetUserById(id);
+            User selectUser = await IRepo.GetUserById(id);
             if(selectUser == null)
             {
                 return NotFound();
             }
 
-            await _Repo.DeleteUser(id);
-            await _Repo.Save();
+            await IRepo.DeleteUser(id);
+            await IRepo.Save();
 
             return NoContent();
         }

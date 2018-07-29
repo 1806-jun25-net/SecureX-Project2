@@ -17,23 +17,24 @@ namespace SecureXWebApi.Controllers
     //[Authorize]
     public class BankController : Controller
     {
-        private readonly SecureXRepository _Repo;
+        private readonly ISecureXRepository IRepo;
 
-        public BankController(SecureXRepository Repo)
+        public BankController(ISecureXRepository Repo)
         {
-            _Repo = Repo;
+            IRepo = Repo;
         }
 
         // GET: api/<controller>
-        [HttpGet]
+       [HttpGet]
        public async Task<ActionResult> GetAll()
        {
-            var banklist = await _Repo.GetBanks();
+            var banklist = await IRepo.GetBanks();
             return Ok(banklist);
        }
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
+        [FormatFilter]
         public async Task<ActionResult<Bank>> GetById(int x)
         {
             if(!ModelState.IsValid)
@@ -42,8 +43,8 @@ namespace SecureXWebApi.Controllers
             }
             try
             {
-                var bank = await _Repo.GetBankById(x);
-                return Ok(bank);
+                var bank = await IRepo.GetBankById(x);
+                return bank;
             }
             catch(DbUpdateException)
             {
@@ -53,19 +54,20 @@ namespace SecureXWebApi.Controllers
 
         // POST api/<controller>
         [HttpPost]
-        public async Task<IActionResult> Create(Bank bank)
+        public async Task<IActionResult> Create([FromBody]Bank bank)
         {
-            await _Repo.AddBank(bank);
-            await _Repo.Save();
+            bank.Id = 0;
+            await IRepo.AddBank(bank);
+            await IRepo.Save();
 
             return NoContent();
         }
 
         // PUT api/<controller>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(decimal amt, Bank bank)
+        public async Task<IActionResult> Update(int id, [FromBody]decimal amt, Bank bank)
         {
-            Bank selectBank = await _Repo.GetBankById(bank.Id);
+            Bank selectBank = await IRepo.GetBankById(bank.Id);
 
             if(selectBank == null)
             {
@@ -74,7 +76,7 @@ namespace SecureXWebApi.Controllers
 
             selectBank.Reserves = amt;
             selectBank.Reserves = bank.Reserves;
-            await _Repo.Save();
+            await IRepo.Save();
 
             return NoContent();
         }

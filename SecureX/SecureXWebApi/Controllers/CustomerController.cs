@@ -16,24 +16,25 @@ namespace SecureXWebApi.Controllers
     [Route("api/[controller]")]
     public class CustomerController : Controller
     {
-        private readonly SecureXRepository _Repo;
+        private readonly ISecureXRepository IRepo;
 
-        public CustomerController(SecureXRepository Repo)
+        public CustomerController(ISecureXRepository Repo)
         {
-            _Repo = Repo;
+            IRepo = Repo;
         }
 
         // GET: api/<controller>
         [HttpGet]
         public async Task<ActionResult> GetAll()
         {
-            var customerlist = await _Repo.GetCustomers();
+            var customerlist = await IRepo.GetCustomers();
             return Ok(customerlist);
         }
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Account>> GetById(int x)
+        [FormatFilter]
+        public async Task<ActionResult<Customer>> GetById(int x)
         {
             if (!ModelState.IsValid)
             {
@@ -41,8 +42,8 @@ namespace SecureXWebApi.Controllers
             }
             try
             {
-                var customer = await _Repo.GetCustomerById(x);
-                return Ok(customer);
+                var customer = await IRepo.GetCustomerById(x);
+                return customer;
             }
             catch (DbUpdateException)
             {
@@ -52,19 +53,20 @@ namespace SecureXWebApi.Controllers
 
         // POST api/<controller>
         [HttpPost]
-        public async Task<IActionResult> Create(Customer customer)
+        public async Task<IActionResult> Create([FromBody]Customer customer)
         {
-            await _Repo.AddCustomer(customer);
-            await _Repo.Save();
+            customer.Id = 0;
+            await IRepo.AddCustomer(customer);
+            await IRepo.Save();
 
             return NoContent();
         }
 
         // PUT api/<controller>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int phone, Customer customer)
+        public async Task<IActionResult> Update(int id, [FromBody] int phone, Customer customer)
         {
-            Customer selectcust = await _Repo.GetCustomerById(customer.Id);
+            Customer selectcust = await IRepo.GetCustomerById(customer.Id);
 
 
             if (selectcust == null)
@@ -74,7 +76,7 @@ namespace SecureXWebApi.Controllers
 
             selectcust.PhoneNumber = phone;
             selectcust.PhoneNumber = customer.PhoneNumber;
-            await _Repo.Save();
+            await IRepo.Save();
 
             return NoContent();
         }
@@ -83,14 +85,14 @@ namespace SecureXWebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            Customer selectcust = await _Repo.GetCustomerById(id);
+            Customer selectcust = await IRepo.GetCustomerById(id);
             if (selectcust == null)
             {
                 return NotFound();
             }
 
-            await _Repo.DeleteCustomer(id);
-            await _Repo.Save();
+            await IRepo.DeleteCustomer(id);
+            await IRepo.Save();
 
             return NoContent();
         }

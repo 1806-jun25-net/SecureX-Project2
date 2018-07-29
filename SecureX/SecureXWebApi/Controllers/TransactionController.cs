@@ -16,24 +16,25 @@ namespace SecureXWebApi.Controllers
     [Route("api/[controller]")]
     public class TransactionController : Controller
     {
-        private readonly SecureXRepository _Repo;
+        private readonly ISecureXRepository IRepo;
 
-        public TransactionController(SecureXRepository Repo)
+        public TransactionController(ISecureXRepository Repo)
         {
-            _Repo = Repo;
+            IRepo = Repo;
         }
 
         // GET: api/<controller>
         [HttpGet]
         public async Task<ActionResult> GetAll()
         {
-            var tranlist = await _Repo.GetTransactions();
+            var tranlist = await IRepo.GetTransactions();
             return Ok(tranlist);
         }
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Account>> GetById(int x)
+        [FormatFilter]
+        public async Task<ActionResult<Transaction>> GetById(int x)
         {
             if (!ModelState.IsValid)
             {
@@ -41,8 +42,8 @@ namespace SecureXWebApi.Controllers
             }
             try
             {
-                var tran = await _Repo.GetTransactionById(x);
-                return Ok(tran);
+                var tran = await IRepo.GetTransactionById(x);
+                return tran;
             }
             catch (DbUpdateException)
             {
@@ -52,10 +53,11 @@ namespace SecureXWebApi.Controllers
 
         // POST api/<controller>
         [HttpPost]
-        public async Task<IActionResult> Create(Transaction tran)
+        public async Task<IActionResult> Create([FromBody]Transaction tran)
         {
-            await _Repo.AddTransaction(tran);
-            await _Repo.Save();
+            tran.Id = 0;
+            await IRepo.AddTransaction(tran);
+            await IRepo.Save();
 
             return NoContent();
         }
