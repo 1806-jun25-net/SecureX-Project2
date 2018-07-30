@@ -9,7 +9,6 @@ namespace SecureXLibrary
         public int Id { get; set; }
         public decimal Reserves { get; set; }
         public string City { get; set; }
-
         private readonly decimal MinimumReserves = 1500000.00m;
 
         // methods

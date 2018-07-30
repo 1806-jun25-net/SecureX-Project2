@@ -25,14 +25,16 @@ namespace SecureXWebApi.Controllers
         }
 
         // GET: api/<controller>
+        //ELA tested
         [HttpGet]
-        public async Task<ActionResult> GetAll()
+        public async Task<IEnumerable<Account>> GetAll()
         {            
                 var accountlist = await IRepo.GetAccounts();
-                return Ok(accountlist);
+                return accountlist;
         }
 
         // GET api/<controller>/5
+        //ELA tested
         [HttpGet("{id}")]
         [FormatFilter]
         public async Task<ActionResult<Account>> GetById(int id)
@@ -65,7 +67,7 @@ namespace SecureXWebApi.Controllers
 
         // PUT api/<controller>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update( [FromBody] Account account)
+        public async Task<IActionResult> Update([FromBody] Account account)
         {
             Account selectAcc = await IRepo.GetAccountById(account.Id);
             
