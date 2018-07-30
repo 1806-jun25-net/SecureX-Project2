@@ -65,7 +65,7 @@ namespace SecureXWebApi.Controllers
 
         // PUT api/<controller>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody]decimal amt, Bank bank)
+        public async Task<IActionResult> Update([FromBody] Bank bank)
         {
             Bank selectBank = await IRepo.GetBankById(bank.Id);
 
@@ -73,8 +73,6 @@ namespace SecureXWebApi.Controllers
             {
                 return NotFound();
             }
-
-            selectBank.Reserves = amt;
             selectBank.Reserves = bank.Reserves;
             await IRepo.Save();
 

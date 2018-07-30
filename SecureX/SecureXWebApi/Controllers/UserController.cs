@@ -65,7 +65,7 @@ namespace SecureXWebApi.Controllers
 
         // PUT api/<controller>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody]String password, User user)
+        public async Task<IActionResult> Update([FromBody] User user)
         {
             User selectUser = await IRepo.GetUserById(user.Id);
 
@@ -74,7 +74,6 @@ namespace SecureXWebApi.Controllers
                 return NotFound();
             }
 
-            selectUser.Password = password;
             selectUser.Password = user.Password;
             await IRepo.Save();
 

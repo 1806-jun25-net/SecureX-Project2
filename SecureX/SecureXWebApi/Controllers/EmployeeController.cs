@@ -14,6 +14,7 @@ namespace SecureXWebApi.Controllers
 {
     //[Authorize]
     [Route("api/[controller]")]
+    [ApiController]
     public class EmployeeController : Controller
     {
         private readonly ISecureXRepository IRepo;
@@ -64,7 +65,7 @@ namespace SecureXWebApi.Controllers
 
         // PUT api/<controller>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody]int bank, Employee employee)
+        public async Task<IActionResult> Update([FromBody] Employee employee)
         {
             Employee selectemploy = await IRepo.GetEmployeeById(employee.Id);
 
@@ -74,7 +75,6 @@ namespace SecureXWebApi.Controllers
                 return NotFound();
             }
 
-            selectemploy.BankId = bank;
             selectemploy.BankId = employee.BankId;
             await IRepo.Save();
 
