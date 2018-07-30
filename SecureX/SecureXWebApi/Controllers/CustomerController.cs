@@ -65,7 +65,7 @@ namespace SecureXWebApi.Controllers
 
         // PUT api/<controller>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] int phone, Customer customer)
+        public async Task<IActionResult> Update([FromBody] Customer customer)
         {
             Customer selectcust = await IRepo.GetCustomerById(customer.Id);
 
@@ -74,8 +74,6 @@ namespace SecureXWebApi.Controllers
             {
                 return NotFound();
             }
-
-            selectcust.PhoneNumber = phone;
             selectcust.PhoneNumber = customer.PhoneNumber;
             await IRepo.Save();
 

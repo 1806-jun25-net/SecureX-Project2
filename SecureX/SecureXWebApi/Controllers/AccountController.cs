@@ -65,7 +65,7 @@ namespace SecureXWebApi.Controllers
 
         // PUT api/<controller>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id ,[FromBody] string type, Account account)
+        public async Task<IActionResult> Update([FromBody] Account account)
         {
             Account selectAcc = await IRepo.GetAccountById(account.Id);
             
@@ -75,7 +75,6 @@ namespace SecureXWebApi.Controllers
                 return NotFound();
             }
 
-            selectAcc.AccountType = type;
             selectAcc.AccountType = account.AccountType;
             await IRepo.Save();
 
