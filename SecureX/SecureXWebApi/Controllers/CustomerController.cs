@@ -75,6 +75,9 @@ namespace SecureXWebApi.Controllers
                 return NotFound();
             }
             selectcust.PhoneNumber = customer.PhoneNumber;
+            selectcust.Address = customer.Address;
+            selectcust.City = customer.City;
+            await IRepo.UpdateCustomer(selectcust);
             await IRepo.Save();
 
             return NoContent();

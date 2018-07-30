@@ -74,6 +74,7 @@ namespace SecureXWebApi.Controllers
                 return NotFound();
             }
             selectBank.Reserves = bank.Reserves;
+            await IRepo.UpdateBank(selectBank);
             await IRepo.Save();
 
             return NoContent();

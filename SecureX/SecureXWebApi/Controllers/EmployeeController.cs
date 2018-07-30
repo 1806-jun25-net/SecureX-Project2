@@ -76,6 +76,7 @@ namespace SecureXWebApi.Controllers
             }
 
             selectemploy.BankId = employee.BankId;
+            await IRepo.UpdateEmployee(selectemploy);
             await IRepo.Save();
 
             return NoContent();
