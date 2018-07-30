@@ -5,7 +5,7 @@ using SecureXLibrary;
 
 namespace SecureXTest
 {
-    public class UnitTest
+    public class UnitTestRepo
     {
         private readonly Transaction transact1pos = new Transaction("Carl", DateTime.Now, 500.00m);
         private readonly Transaction transact1neg = new Transaction("Mano", DateTime.Now, -20.00m);

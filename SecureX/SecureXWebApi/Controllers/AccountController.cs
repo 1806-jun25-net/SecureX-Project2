@@ -25,14 +25,16 @@ namespace SecureXWebApi.Controllers
         }
 
         // GET: api/<controller>
+        //ELA test done
         [HttpGet]
-        public async Task<ActionResult> GetAll()
+        public async Task<IEnumerable<Account>> GetAll()
         {            
                 var accountlist = await IRepo.GetAccounts();
-                return Ok(accountlist);
+                return accountlist;
         }
 
         // GET api/<controller>/5
+        //ELA test done
         [HttpGet("{id}")]
         [FormatFilter]
         public async Task<ActionResult<Account>> GetById(int id)

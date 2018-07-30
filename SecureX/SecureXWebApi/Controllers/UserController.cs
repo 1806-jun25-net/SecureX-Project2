@@ -26,16 +26,16 @@ namespace SecureXWebApi.Controllers
 
         // GET: api/<controller>
         [HttpGet]
-        public async Task<ActionResult> GetAll()
+        public async Task<IEnumerable<User>> GetAll()
         {
             var userlist = await IRepo.GetUsers();
-            return Ok(userlist);
+            return userlist;
         }
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
         [FormatFilter]
-        public async Task<ActionResult<User>> GetById(int x)
+        public async Task<ActionResult<User>> GetById(int id)
         {
             if(!ModelState.IsValid)
             {
@@ -43,7 +43,7 @@ namespace SecureXWebApi.Controllers
             }
             try
             {
-                var user = await IRepo.GetUserById(x);
+                var user = await IRepo.GetUserById(id);
                 return user;
             }
             catch(DbUpdateException)

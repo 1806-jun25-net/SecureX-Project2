@@ -15,7 +15,7 @@ namespace SecureXTest
 
         [Fact]
         [CustomAssertion]
-        public async void ShouldGetAccountGetByIDAsync()
+        public async void ShouldGetAccountByIDAsync()
         {
 
             Mock<ISecureXRepository> MoqRepo = new Mock<ISecureXRepository>();
@@ -31,6 +31,39 @@ namespace SecureXTest
             var result = await con.GetById(acc.Id);
 
             result.Value.Should().BeEquivalentTo(acc);
+        }
+
+
+        [Fact]
+        [CustomAssertion]
+        public async void ShouldGetAllAccounts()
+        {
+
+            Mock<ISecureXRepository> MoqRepo = new Mock<ISecureXRepository>();
+            List<Account> TestList = new List<Account>();
+
+            Account acc1 = new Account()
+            {
+                Id = 323,
+                Funds = 100m,
+                AccountType = "S"
+            };
+
+            Account acc2 = new Account()
+            {
+                Id = 324,
+                Funds = 1020m,
+                AccountType = "C"
+            };
+
+            TestList.Add(acc1);
+            TestList.Add(acc2);
+
+            MoqRepo.Setup(x => x.GetAccounts()).ReturnsAsync(TestList);
+            var con = new AccountController(MoqRepo.Object);
+            var result = await con.GetAll();
+
+            result.Should().BeEquivalentTo(TestList);
         }
 
     } 

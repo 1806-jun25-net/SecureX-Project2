@@ -26,16 +26,16 @@ namespace SecureXWebApi.Controllers
 
         // GET: api/<controller>
         [HttpGet]
-        public async Task<ActionResult> GetAll()
+        public async Task<IEnumerable<CreditCard>> GetAll()
         {
             var cclist = await IRepo.GetCreditCards();
-            return Ok(cclist);
+            return cclist;
         }
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
         [FormatFilter]
-        public async Task<ActionResult<CreditCard>> GetById(int x)
+        public async Task<ActionResult<CreditCard>> GetById(int id)
         {
             if (!ModelState.IsValid)
             {
@@ -43,7 +43,7 @@ namespace SecureXWebApi.Controllers
             }
             try
             {
-                var creditc = await IRepo.GetCreditCardById(x);
+                var creditc = await IRepo.GetCreditCardById(id);
                 return creditc;
             }
             catch (DbUpdateException)

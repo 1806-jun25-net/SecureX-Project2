@@ -26,10 +26,10 @@ namespace SecureXWebApi.Controllers
 
         // GET: api/<controller>
        [HttpGet]
-       public async Task<ActionResult> GetAll()
+       public async Task<IEnumerable<Bank>> GetAll()
        {
             var banklist = await IRepo.GetBanks();
-            return Ok(banklist);
+            return banklist;
        }
 
         // GET api/<controller>/5
