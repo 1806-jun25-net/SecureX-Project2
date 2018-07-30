@@ -25,6 +25,7 @@ namespace SecureXWebApi.Controllers
         }
 
         // GET: api/<controller>
+        //ELA test
        [HttpGet]
        public async Task<IEnumerable<Bank>> GetAll()
        {
@@ -33,9 +34,10 @@ namespace SecureXWebApi.Controllers
        }
 
         // GET api/<controller>/5
+        //ELA tested
         [HttpGet("{id}")]
         [FormatFilter]
-        public async Task<ActionResult<Bank>> GetById(int x)
+        public async Task<ActionResult<Bank>> GetById(int id)
         {
             if(!ModelState.IsValid)
             {
@@ -43,24 +45,13 @@ namespace SecureXWebApi.Controllers
             }
             try
             {
-                var bank = await IRepo.GetBankById(x);
+                var bank = await IRepo.GetBankById(id);
                 return bank;
             }
             catch(DbUpdateException)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
-        }
-
-        // POST api/<controller>
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody]Bank bank)
-        {
-            bank.Id = 0;
-            await IRepo.AddBank(bank);
-            await IRepo.Save();
-
-            return NoContent();
         }
 
         // PUT api/<controller>/5

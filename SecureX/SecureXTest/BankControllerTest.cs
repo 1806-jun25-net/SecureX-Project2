@@ -19,7 +19,7 @@ namespace SecureXTest
 
     [Fact]
     [CustomAssertion]
-    public async void ShouldGetBankByID()
+    public async void ShouldGetByID_Bank()
     {
 
         Mock<ISecureXRepository> MoqRepo = new Mock<ISecureXRepository>();
@@ -40,7 +40,7 @@ namespace SecureXTest
 
     [Fact]
     [CustomAssertion]
-    public async void ShouldGetAllBanks()
+    public async void ShouldGetAll_Bank()
     {
 
         Mock<ISecureXRepository> MoqRepo = new Mock<ISecureXRepository>();
@@ -70,6 +70,28 @@ namespace SecureXTest
         result.Should().BeEquivalentTo(TestList);
     }
 
-} 
+
+        //[Fact]
+        //[CustomAssertion]
+        //public async void ShouldUpdate_Bank()
+        //{
+
+        //    Mock<ISecureXRepository> MoqRepo = new Mock<ISecureXRepository>();
+
+        //    Bank bank1 = new Bank()
+        //    {
+        //        Id = 609,
+        //        Reserves = 12100m,
+        //        City = "Sydney"
+        //    };
+
+        //    MoqRepo.Setup(x => x.AddBank(bank1));
+        //    MoqRepo.Setup(x => x.Save());
+        //    bank1.Reserves = 10m;
+        //    var con = new BankController(MoqRepo.Object);
+        //    var result = await con.Update(bank1);
+        //    result.Should().BeEquivalentTo(bank1);
+        //}
+    } 
 }
 
