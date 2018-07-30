@@ -14,6 +14,7 @@ namespace SecureXWebApi.Controllers
 {
     //[Authorize]
     [Route("api/[controller]")]
+    [ApiController]
     public class EmployeeController : Controller
     {
         private readonly ISecureXRepository IRepo;
