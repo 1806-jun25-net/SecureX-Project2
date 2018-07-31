@@ -55,7 +55,7 @@ namespace SecureXWebApi.Controllers
         [ProducesResponseType(400)]
         public async Task<ActionResult> Register(Login input,
             [FromServices] UserManager<IdentityUser> userManager,
-            [FromServices] RoleManager<IdentityRole> roleManager, bool employee = true)
+            [FromServices] RoleManager<IdentityRole> roleManager, bool employee = false)
         {
             // with an [ApiController], model state is always automatically checked
             // and return 400 if any errors.
