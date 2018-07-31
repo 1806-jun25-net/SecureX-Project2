@@ -101,7 +101,6 @@ namespace SecureXLibrary
         {
             Id = user.Id,
             UserName = user.UserName,
-            Password = user.Password,
             FirstName = user.FirstName,
             LastName = user.LastName,
             CustomerId = user.CustomerId,
@@ -112,7 +111,6 @@ namespace SecureXLibrary
         {
             Id = user.Id,
             UserName = user.UserName,
-            Password = user.Password,
             FirstName = user.FirstName,
             LastName = user.LastName,
             CustomerId = user.CustomerId,
