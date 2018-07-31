@@ -33,7 +33,7 @@ namespace SecureXWebApi.Controllers
 
             if (!result.Succeeded)
             {
-                return StatusCode(403); // Forbidden
+                return StatusCode(400); // Bad Request
             }
 
             return NoContent();
