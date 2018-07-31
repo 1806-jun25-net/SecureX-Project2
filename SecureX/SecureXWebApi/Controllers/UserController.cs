@@ -12,7 +12,7 @@ using SecureXLibrary;
 
 namespace SecureXWebApi.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : Controller
@@ -74,7 +74,8 @@ namespace SecureXWebApi.Controllers
                 return NotFound();
             }
 
-            selectUser.Password = user.Password;
+            selectUser.FirstName = user.FirstName;
+            selectUser.LastName = user.LastName;
             await IRepo.Save();
 
             return NoContent();

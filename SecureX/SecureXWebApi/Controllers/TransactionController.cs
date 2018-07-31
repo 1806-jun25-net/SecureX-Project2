@@ -12,7 +12,7 @@ using SecureXLibrary;
 
 namespace SecureXWebApi.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class TransactionController : Controller
