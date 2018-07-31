@@ -14,7 +14,7 @@ namespace SecureXWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class BankController : Controller
     {
         private readonly ISecureXRepository IRepo;

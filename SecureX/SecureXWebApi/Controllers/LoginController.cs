@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +26,7 @@ namespace SecureXWebApi.Controllers
 
         [HttpPost]
         [ProducesResponseType(204)]
-        [ProducesResponseType(403)]
+        [ProducesResponseType(400)]
         public async Task<ActionResult> Login(Login input)
         {
             var result = await _signInManager.PasswordSignInAsync(input.UserName, input.Password,
@@ -39,6 +40,7 @@ namespace SecureXWebApi.Controllers
             return NoContent();
         }
 
+        [Authorize]
         [HttpPost]
         [ProducesResponseType(204)]
         public async Task<NoContentResult> Logout()
@@ -53,7 +55,7 @@ namespace SecureXWebApi.Controllers
         [ProducesResponseType(400)]
         public async Task<ActionResult> Register(Login input,
             [FromServices] UserManager<IdentityUser> userManager,
-            [FromServices] RoleManager<IdentityRole> roleManager, bool admin = false)
+            [FromServices] RoleManager<IdentityRole> roleManager, bool employee = true)
         {
             // with an [ApiController], model state is always automatically checked
             // and return 400 if any errors.
@@ -66,21 +68,21 @@ namespace SecureXWebApi.Controllers
                 return BadRequest(result);
             }
 
-            if (admin)
+            if (employee)
             {
-                if (!(await roleManager.RoleExistsAsync("admin")))
+                if (!(await roleManager.RoleExistsAsync("employee")))
                 {
-                    var adminRole = new IdentityRole("admin");
-                    result = await roleManager.CreateAsync(adminRole);
+                    var employeeRole = new IdentityRole("employee");
+                    result = await roleManager.CreateAsync(employeeRole);
                     if (!result.Succeeded)
                     {
-                        return StatusCode(500, result);
+                        return StatusCode(400, result);
                     }
                 }
-                result = await userManager.AddToRoleAsync(user, "admin");
+                result = await userManager.AddToRoleAsync(user, "employee");
                 if (!result.Succeeded)
                 {
-                    return StatusCode(500, result);
+                    return StatusCode(400, result);
                 }
             }
 
