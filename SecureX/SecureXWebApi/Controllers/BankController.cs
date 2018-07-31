@@ -26,12 +26,13 @@ namespace SecureXWebApi.Controllers
 
         // GET: api/<controller>
         //ELA test
-       [HttpGet]
-       public async Task<IEnumerable<Bank>> GetAll()
-       {
+        [Authorize(Roles = "employee")]
+        [HttpGet]
+        public async Task<IEnumerable<Bank>> GetAll()
+        {
             var banklist = await IRepo.GetBanks();
             return banklist;
-       }
+        }
 
         // GET api/<controller>/5
         //ELA tested
@@ -39,7 +40,7 @@ namespace SecureXWebApi.Controllers
         [FormatFilter]
         public async Task<ActionResult<Bank>> GetById(int id)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return NotFound();
             }
@@ -48,7 +49,7 @@ namespace SecureXWebApi.Controllers
                 var bank = await IRepo.GetBankById(id);
                 return bank;
             }
-            catch(DbUpdateException)
+            catch (DbUpdateException)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
@@ -60,7 +61,7 @@ namespace SecureXWebApi.Controllers
         {
             Bank selectBank = await IRepo.GetBankById(bank.Id);
 
-            if(selectBank == null)
+            if (selectBank == null)
             {
                 return NotFound();
             }
@@ -71,6 +72,6 @@ namespace SecureXWebApi.Controllers
             return NoContent();
         }
 
-        
+
     }
 }
