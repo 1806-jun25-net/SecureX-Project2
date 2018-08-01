@@ -53,6 +53,7 @@ namespace SecureXWebApi.Controllers
         }
 
         // POST api/<controller>
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody]User user)
         {

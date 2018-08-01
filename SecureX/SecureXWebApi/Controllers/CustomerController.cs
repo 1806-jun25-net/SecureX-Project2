@@ -25,6 +25,7 @@ namespace SecureXWebApi.Controllers
         }
 
         // GET: api/<controller>
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult> GetAll()
         {
@@ -53,6 +54,7 @@ namespace SecureXWebApi.Controllers
         }
 
         // POST api/<controller>
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody]Customer customer)
         {
