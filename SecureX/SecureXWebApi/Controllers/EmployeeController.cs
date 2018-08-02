@@ -52,25 +52,6 @@ namespace SecureXWebApi.Controllers
             }
         }
 
-        [HttpGet("{Bank}")]
-        [FormatFilter]
-        public async Task<ActionResult<List<Employee>>> GetEmployeeByBank(Bank Bank)
-        {
-            if (!ModelState.IsValid)
-            {
-                return NotFound();
-            }
-            try
-            {
-                var employ = await IRepo.GetEmployeeByLocation(Bank);
-                return employ;
-            }
-            catch (DbUpdateException)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-
         // POST api/<controller>
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] Employee employee)

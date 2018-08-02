@@ -53,25 +53,6 @@ namespace SecureXWebApi.Controllers
             }
         }
 
-        [HttpGet("{Bank}")]
-        [FormatFilter]
-        public async Task<ActionResult<List<Customer>>> GetCustomerByBank(Bank Bank)
-        {
-            if (!ModelState.IsValid)
-            {
-                return NotFound();
-            }
-            try
-            {
-                var cust = await IRepo.GetCustomerByLocation(Bank);
-                return cust;
-            }
-            catch (DbUpdateException)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-
         // POST api/<controller>
         [AllowAnonymous]
         [HttpPost]
