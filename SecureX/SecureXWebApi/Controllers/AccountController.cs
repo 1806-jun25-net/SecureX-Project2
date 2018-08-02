@@ -54,26 +54,6 @@ namespace SecureXWebApi.Controllers
             }
         }
 
-        [HttpGet("{user}")]
-        [FormatFilter]
-        public async Task<ActionResult<List<Account>>> GetAccountByUser(User user )
-        {
-            if(!ModelState.IsValid)
-            {
-                return NotFound();
-            }
-            try
-            {
-                var account = await IRepo.GetAccountsByUser(user);
-                return account;
-            }
-            catch (DbUpdateException)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-
-        }
-
         // POST api/<controller>
         [HttpPost]
         public async Task<IActionResult> Create([FromBody]Account account)

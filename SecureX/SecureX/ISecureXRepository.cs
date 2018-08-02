@@ -29,7 +29,7 @@ namespace SecureXLibrary
         Task<Account> GetAccountById(int id);
         Task<Account> GetAccountInformation(int id);
         Task<IEnumerable<Account>> GetAccounts();
-        Task<List<Account>> GetAccountsByUser(User User);
+        IEnumerable<Account> GetAccountsByUser(User User);
         Task<Bank> GetBankById(int id);
         Task<IEnumerable<Bank>> GetBanks();
         Task<CreditCard> GetCreditCardById(int id);
@@ -55,9 +55,9 @@ namespace SecureXLibrary
         Task UpdateEmployee(Employee employee);
         Task UpdateUser(User user);
         Task<Transaction> WithdrawlMoney(Transaction Transaction, Account Account);
-        Task<List<CreditCard>> GetCreditCardsByUser(User user);
-        Task<List<Transaction>> GetTransactionByAccount(Account account);
-        Task<List<Customer>> GetCustomerByLocation(Bank bank);
-        Task<List<Employee>> GetEmployeeByLocation(Bank bank);
+        IEnumerable<CreditCard> GetCreditCardsByUser(User user);
+        IEnumerable<Transaction> GetTransactionByAccount(Account account);
+        IEnumerable<Customer> GetCustomerByLocation(Bank bank);
+        IEnumerable<Employee> GetEmployeeByLocation(Bank bank);
     }
 }
