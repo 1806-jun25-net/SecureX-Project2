@@ -52,6 +52,25 @@ namespace SecureXWebApi.Controllers
             }
         }
 
+        [HttpGet("{account}")]
+        [FormatFilter]
+        public async Task<ActionResult<List<Transaction>>> GetTransactionByAccount(Account account)
+        {
+            if (!ModelState.IsValid)
+            {
+                return NotFound();
+            }
+            try
+            {
+                var tran = await IRepo.GetTransactionByAccount(account);
+                return tran;
+            }
+            catch (DbUpdateException)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         // POST api/<controller>
         [HttpPost]
         public async Task<IActionResult> Create([FromBody]Transaction tran)

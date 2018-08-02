@@ -119,7 +119,7 @@ namespace SecureXLibrary
         }
 
         //ELA async not necessary
-        public IEnumerable<Account> GetAccountsByUser(User User)
+        public async Task<List<Account>> GetAccountsByUser(User User)
         {
             var accounts = _db.Account;
             List<Account> list = new List<Account>();
@@ -135,7 +135,7 @@ namespace SecureXLibrary
             return list;
         }
 
-        public IEnumerable<CreditCard> GetCreditCardsByUser(User user)
+        public async Task<List<CreditCard>> GetCreditCardsByUser(User user)
         {
             var cards = _db.CreditCard;
             List<CreditCard> list = new List<CreditCard>();
@@ -180,7 +180,7 @@ namespace SecureXLibrary
             return list;
         }
 
-        public IEnumerable<Transaction> GetTransactionByAccount( Account account)
+        public async Task<List<Transaction>> GetTransactionByAccount( Account account)
         {
             var Transactions = _db.Transaction;
             List<Transaction> list = new List<Transaction>();
@@ -196,7 +196,7 @@ namespace SecureXLibrary
             return list;
         }
 
-        public IEnumerable<Customer> GetCustomerByLocation(Bank bank)
+        public async Task<List<Customer>> GetCustomerByLocation(Bank bank)
         {
             var Customers = _db.Customer;
             List<Customer> list = new List<Customer>();
@@ -212,7 +212,7 @@ namespace SecureXLibrary
             return list;
         }
 
-        public IEnumerable<Employee> GetEmployeeByLocation(Bank bank)
+        public async Task<List<Employee>> GetEmployeeByLocation(Bank bank)
         {
             var Employees = _db.Employee;
             List<Employee> list = new List<Employee>();
