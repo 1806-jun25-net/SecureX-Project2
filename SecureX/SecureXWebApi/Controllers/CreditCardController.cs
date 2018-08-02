@@ -52,6 +52,25 @@ namespace SecureXWebApi.Controllers
             }
         }
 
+        [HttpGet("{user}")]
+        [FormatFilter]
+        public async Task<ActionResult<List<CreditCard>>> GetCreditCardByUser(User user)
+        {
+            if (!ModelState.IsValid)
+            {
+                return NotFound();
+            }
+            try
+            {
+                var creditc = await IRepo.GetCreditCardsByUser(user);
+                return creditc;
+            }
+            catch (DbUpdateException)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         // POST api/<controller>
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreditCard cc)
