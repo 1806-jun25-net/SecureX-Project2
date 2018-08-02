@@ -12,7 +12,7 @@ using SecureXLibrary;
 
 namespace SecureXWebApi.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CustomerController : Controller
@@ -25,11 +25,12 @@ namespace SecureXWebApi.Controllers
         }
 
         // GET: api/<controller>
+        [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult> GetAll()
+        public async Task<IEnumerable<Customer>> GetAll()
         {
             var customerlist = await IRepo.GetCustomers();
-            return Ok(customerlist);
+            return customerlist;
         }
 
         // GET api/<controller>/5
@@ -53,6 +54,7 @@ namespace SecureXWebApi.Controllers
         }
 
         // POST api/<controller>
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody]Customer customer)
         {

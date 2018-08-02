@@ -37,7 +37,6 @@ namespace SecureXTest
                 {
                     Id = 323,
                     UserName = "Bob",
-                    Password = "Dole",
                     FirstName = "Bob",
                     LastName = "Jole",
                     CustomerId = 11,
@@ -64,7 +63,6 @@ namespace SecureXTest
                 {
                     Id = 323,
                     UserName = "Bob",
-                    Password = "Dole",
                     FirstName = "Bob",
                     LastName = "Jole",
                     CustomerId = 11,
@@ -75,7 +73,6 @@ namespace SecureXTest
                 {
                     Id = 3223,
                     UserName = "Sam",
-                    Password = "Goal",
                     FirstName = "Slew",
                     LastName = "Cew",
                     CustomerId = null,

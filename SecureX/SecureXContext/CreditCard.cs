@@ -8,7 +8,7 @@ namespace SecureXContext
         public int Id { get; set; }
         public decimal CreditLimit { get; set; }
         public decimal CurrentDebt { get; set; }
-        public int CreditCardNumber { get; set; }
+        public long CreditCardNumber { get; set; }
         public int CustomerId { get; set; }
 
         public Customer Customer { get; set; }

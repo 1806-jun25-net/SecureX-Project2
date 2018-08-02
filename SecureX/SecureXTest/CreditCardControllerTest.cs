@@ -21,7 +21,7 @@ namespace SecureXTest
 
         [Fact]
         [CustomAssertion]
-        public async void ShouldGetCreditCardByIDAsync()
+        public async void ShouldGetByID_CreditCard()
         {
 
             Mock<ISecureXRepository> MoqRepo = new Mock<ISecureXRepository>();
@@ -44,7 +44,7 @@ namespace SecureXTest
 
         [Fact]
         [CustomAssertion]
-        public async void ShouldGetAllAccounts()
+        public async void ShouldGetAll_CreditCard()
         {
 
             Mock<ISecureXRepository> MoqRepo = new Mock<ISecureXRepository>();

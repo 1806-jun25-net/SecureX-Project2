@@ -56,6 +56,9 @@ namespace SecureXTest
                 AccountType = "C"
             };
 
+            NewList.Add(acc1);
+            NewList.Add(acc2);
+
             MoqRepo.Setup(X => X.AddAccount(acc1));
             MoqRepo.Setup(x => x.AddAccount(acc2));
             MoqRepo.Setup(x => x.Save());
@@ -82,16 +85,16 @@ namespace SecureXTest
                 AccountType = "S"
             };
 
-            MoqRepo.Setup(x => x.AddAccount(acc1));
-            MoqRepo.Setup(x => x.Save());
-            MoqRepo.Setup(x => x.DeleteAccount(acc1.Id));
-            MoqRepo.Setup(x => x.Save());
+            //MoqRepo.Setup(x => x.AddAccount(acc1));
+            MoqRepo.Setup(x => x.Save()).Returns(Task.CompletedTask);
+            MoqRepo.Setup(x => x.DeleteAccount(acc1.Id)).Returns(Task.CompletedTask);
+            MoqRepo.Setup(x => x.GetAccountById(acc1.Id)).ReturnsAsync(acc1);
 
             var con = new AccountController(MoqRepo.Object);
 
             var result = await con.GetById(acc1.Id);
 
-            result.Value.Should().Be(null);
+            result.Value.Should().Be(acc1);
         }
 
     } 

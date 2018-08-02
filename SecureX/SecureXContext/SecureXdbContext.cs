@@ -36,7 +36,7 @@ namespace SecureXContext
                     .HasMaxLength(1)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Funds).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.Funds).HasColumnType("decimal(18, 2)");
             });
 
             modelBuilder.Entity<Bank>(entity =>
@@ -45,19 +45,19 @@ namespace SecureXContext
 
                 entity.Property(e => e.City)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasMaxLength(128)
+                    .IsUnicode(true);
 
-                entity.Property(e => e.Reserves).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.Reserves).HasColumnType("decimal(18, 2)");
             });
 
             modelBuilder.Entity<CreditCard>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
 
-                entity.Property(e => e.CreditLimit).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.CreditLimit).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.CurrentDebt).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.CurrentDebt).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
 
@@ -74,13 +74,13 @@ namespace SecureXContext
 
                 entity.Property(e => e.Address)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasMaxLength(128)
+                    .IsUnicode(true);
 
                 entity.Property(e => e.City)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasMaxLength(128)
+                    .IsUnicode(true);
             });
 
             modelBuilder.Entity<Employee>(entity =>
@@ -104,14 +104,14 @@ namespace SecureXContext
 
                 entity.Property(e => e.AccountId).HasColumnName("AccountID");
 
-                entity.Property(e => e.DateOfTransaction).HasColumnType("datetime");
+                entity.Property(e => e.DateOfTransaction).HasColumnType("datetime2");
 
                 entity.Property(e => e.Recipient)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasMaxLength(128)
+                    .IsUnicode(true);
 
-                entity.Property(e => e.TransactionAmount).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.TransactionAmount).HasColumnType("decimal(18, 2)");
 
                 entity.HasOne(d => d.Account)
                     .WithMany(p => p.Transaction)
@@ -132,23 +132,18 @@ namespace SecureXContext
 
                 entity.Property(e => e.FirstName)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasMaxLength(128)
+                    .IsUnicode(true);
 
                 entity.Property(e => e.LastName)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Password)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasMaxLength(128)
+                    .IsUnicode(true);
 
                 entity.Property(e => e.UserName)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasMaxLength(128)
+                    .IsUnicode(true);
 
                 entity.HasOne(d => d.IdNavigation)
                     .WithOne(p => p.User)
