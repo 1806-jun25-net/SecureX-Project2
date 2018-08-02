@@ -87,7 +87,7 @@ namespace SecureXTest
 
         //    MoqRepo.Setup(x => x.AddBank(bank1));
         //    MoqRepo.Setup(x => x.Save());
-        //    bank1.Reserves = 10m;
+        //    MoqRepo.Setup(x => x.UpdateBank(bank1));
         //    var con = new BankController(MoqRepo.Object);
         //    var result = await con.Update(bank1);
         //    result.Should().BeEquivalentTo(bank1);
