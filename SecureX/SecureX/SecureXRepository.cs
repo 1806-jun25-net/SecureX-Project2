@@ -135,6 +135,22 @@ namespace SecureXLibrary
             return list;
         }
 
+        public IEnumerable<CreditCard> GetCreditCardsByUser(User user)
+        {
+            var cards = _db.CreditCard;
+            List<CreditCard> list = new List<CreditCard>();
+
+            foreach (var card in cards)
+            {
+                if(user.CustomerId == card.CustomerId )
+                {
+                    list.Add(Mapper.Map(card));
+                }
+            }
+
+            return list;
+        }
+
         //ELA async 
         public async Task<Account> GetAccountInformation(int id)
         {
@@ -158,6 +174,54 @@ namespace SecureXLibrary
                 if (User.Id == transaction.Id)
                 {
                     list.Add(Mapper.Map(transaction));
+                }
+            }
+
+            return list;
+        }
+
+        public IEnumerable<Transaction> GetTransactionByAccount( Account account)
+        {
+            var Transactions = _db.Transaction;
+            List<Transaction> list = new List<Transaction>();
+
+            foreach(var transaction in Transactions)
+            {
+                if(account.Id == transaction.AccountId)
+                {
+                    list.Add(Mapper.Map(transaction));
+                }
+            }
+
+            return list;
+        }
+
+        public IEnumerable<Customer> GetCustomerByLocation(Bank bank)
+        {
+            var Customers = _db.Customer;
+            List<Customer> list = new List<Customer>();
+
+            foreach(var customer in Customers)
+            {
+                if(bank.City == customer.City)
+                {
+                    list.Add(Mapper.Map(customer));
+                }
+            }
+
+            return list;
+        }
+
+        public IEnumerable<Employee> GetEmployeeByLocation(Bank bank)
+        {
+            var Employees = _db.Employee;
+            List<Employee> list = new List<Employee>();
+
+            foreach(var employee in Employees)
+            {
+                if(bank.Id == employee.BankId)
+                {
+                    list.Add(Mapper.Map(employee));
                 }
             }
 

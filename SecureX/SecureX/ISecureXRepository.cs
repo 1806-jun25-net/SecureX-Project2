@@ -55,5 +55,9 @@ namespace SecureXLibrary
         Task UpdateEmployee(Employee employee);
         Task UpdateUser(User user);
         Task<Transaction> WithdrawlMoney(Transaction Transaction, Account Account);
+        IEnumerable<CreditCard> GetCreditCardsByUser(User user);
+        IEnumerable<Transaction> GetTransactionByAccount(Account account);
+        IEnumerable<Customer> GetCustomerByLocation(Bank bank);
+        IEnumerable<Employee> GetEmployeeByLocation(Bank bank);
     }
 }
