@@ -40,6 +40,7 @@ namespace SecureXLibrary
         public static CreditCard Map(SecureXContext.CreditCard creditcard) => new CreditCard
         {
             Id = creditcard.Id,
+            CreditLimit = creditcard.CreditLimit,
             CurrentDebt = creditcard.CurrentDebt,
             CreditCardNumber = creditcard.CreditCardNumber,
             CustomerId = creditcard.CustomerId
@@ -48,6 +49,7 @@ namespace SecureXLibrary
         public static SecureXContext.CreditCard Map(CreditCard creditcard) => new SecureXContext.CreditCard
         {
             Id = creditcard.Id,
+            CreditLimit = creditcard.CreditLimit,
             CurrentDebt = creditcard.CurrentDebt,
             CreditCardNumber = creditcard.CreditCardNumber,
             CustomerId = creditcard.CustomerId
