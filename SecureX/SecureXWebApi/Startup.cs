@@ -17,6 +17,7 @@ using Microsoft.Extensions.Options;
 using SecureXContext;
 using SecureXLibrary;
 using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.AspNetCore.Cors;
 
 namespace SecureXWebApi
 {
@@ -78,6 +79,8 @@ namespace SecureXWebApi
 
             services.AddAuthentication();
 
+            services.AddCors();
+
             services.AddMvc()
                 .AddXmlSerializerFormatters()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
@@ -105,6 +108,16 @@ namespace SecureXWebApi
             }
 
             app.UseAuthentication();
+
+            // Shows UseCors with CorsPolicyBuilder.
+            app.UseCors(builder => builder
+               .AllowAnyHeader()
+               .AllowAnyMethod()
+               .AllowAnyOrigin() // could put angular url here
+               .AllowCredentials()
+               );
+
+            // MAY also need to enable CORS in azure app service
 
             app.UseSwagger();
 
