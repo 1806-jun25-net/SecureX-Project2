@@ -56,7 +56,8 @@ namespace SecureXLibrary
             Id = customer.Id,
             Address = customer.Address,
             PhoneNumber = customer.PhoneNumber,
-            City = customer.City
+            City = customer.City,
+            UserName = customer.UserName
         };
 
         public static SecureXContext.Customer Map(Customer customer) => new SecureXContext.Customer
@@ -64,7 +65,8 @@ namespace SecureXLibrary
             Id = customer.Id,
             Address = customer.Address,
             PhoneNumber = customer.PhoneNumber,
-            City = customer.City
+            City = customer.City,
+            UserName = customer.UserName
         };
 
         public static Employee Map(SecureXContext.Employee employee) => new Employee

@@ -10,5 +10,6 @@ namespace SecureXLibrary
         public string Address { get; set; }
         public long PhoneNumber { get; set; }
         public string City { get; set; }
+        public string UserName { get; set; }
     }
 }

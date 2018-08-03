@@ -81,6 +81,11 @@ namespace SecureXContext
                     .IsRequired()
                     .HasMaxLength(128)
                     .IsUnicode(true);
+
+                entity.Property(e => e.UserName)
+                    .IsRequired()
+                    .HasMaxLength(128)
+                    .IsUnicode(true);
             });
 
             modelBuilder.Entity<Employee>(entity =>

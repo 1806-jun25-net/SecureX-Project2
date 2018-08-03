@@ -14,6 +14,7 @@ namespace SecureXContext
         public string Address { get; set; }
         public long PhoneNumber { get; set; }
         public string City { get; set; }
+        public string UserName { get; set; }
 
         public User User { get; set; }
         public ICollection<CreditCard> CreditCard { get; set; }
