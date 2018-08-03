@@ -11,14 +11,16 @@ namespace SecureXLibrary
         {
             Id = account.Id,
             AccountType = account.AccountType,
-            Funds = account.Funds
+            Funds = account.Funds,
+            CustomerId = account.CustomerId
         };
 
         public static SecureXContext.Account Map(Account account) => new SecureXContext.Account
         {
             Id = account.Id,
             AccountType = account.AccountType,
-            Funds = account.Funds
+            Funds = account.Funds,
+            CustomerId = account.CustomerId
         };
 
         public static Bank Map(SecureXContext.Bank bank) => new Bank

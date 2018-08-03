@@ -37,6 +37,8 @@ namespace SecureXContext
                     .IsUnicode(false);
 
                 entity.Property(e => e.Funds).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
             });
 
             modelBuilder.Entity<Bank>(entity =>
