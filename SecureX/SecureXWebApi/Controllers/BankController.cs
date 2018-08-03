@@ -14,7 +14,7 @@ namespace SecureXWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class BankController : Controller
     {
         private readonly ISecureXRepository IRepo;
@@ -26,7 +26,7 @@ namespace SecureXWebApi.Controllers
 
         // GET: api/<controller>
         //ELA test
-        [Authorize(Roles = "employee")]
+        //[Authorize(Roles = "employee")]
         [HttpGet]
         public async Task<IEnumerable<Bank>> GetAll()
         {
