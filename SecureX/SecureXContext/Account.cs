@@ -14,6 +14,7 @@ namespace SecureXContext
         public string AccountType { get; set; }
         public decimal Funds { get; set; }
         public int CustomerId { get; set; }
+        public string Status { get; set; }
 
         public ICollection<Transaction> Transaction { get; set; }
     }

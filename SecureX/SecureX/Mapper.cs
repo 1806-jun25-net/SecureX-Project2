@@ -12,7 +12,8 @@ namespace SecureXLibrary
             Id = account.Id,
             AccountType = account.AccountType,
             Funds = account.Funds,
-            CustomerId = account.CustomerId
+            CustomerId = account.CustomerId,
+            Status = account.Status
         };
 
         public static SecureXContext.Account Map(Account account) => new SecureXContext.Account
@@ -20,7 +21,8 @@ namespace SecureXLibrary
             Id = account.Id,
             AccountType = account.AccountType,
             Funds = account.Funds,
-            CustomerId = account.CustomerId
+            CustomerId = account.CustomerId,
+            Status = account.Status
         };
 
         public static Bank Map(SecureXContext.Bank bank) => new Bank

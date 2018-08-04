@@ -10,6 +10,7 @@ namespace SecureXLibrary
         public string AccountType { get; set; }
         public decimal Funds { get; set; }
         public int CustomerId { get; set; }
+        public string Status { get; set; }
 
         // methods
         public bool NotOverdraw(decimal amount)

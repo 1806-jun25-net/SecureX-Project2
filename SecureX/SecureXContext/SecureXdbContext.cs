@@ -33,12 +33,17 @@ namespace SecureXContext
 
                 entity.Property(e => e.AccountType)
                     .IsRequired()
-                    .HasMaxLength(1)
-                    .IsUnicode(false);
+                    .HasMaxLength(128)
+                    .IsUnicode(true);
 
                 entity.Property(e => e.Funds).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
+
+                entity.Property(e => e.Status)
+                    .IsRequired()
+                    .HasMaxLength(128)
+                    .IsUnicode(true);
             });
 
             modelBuilder.Entity<Bank>(entity =>
