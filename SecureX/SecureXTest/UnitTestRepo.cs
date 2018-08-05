@@ -15,6 +15,7 @@ namespace SecureXTest
 
         private readonly Bank Bank1 = new Bank
         {
+           Id = 4000,
            Reserves = 500000m,
            City = "Reston"
         };
@@ -22,7 +23,7 @@ namespace SecureXTest
         private readonly Account Acc1 = new Account
         {
 
-            Id = 1,
+            Id = 500,
             AccountType = "Checking",
             Funds = 500m,
             CustomerId = 1,
@@ -30,18 +31,25 @@ namespace SecureXTest
 
         };
 
-        private readonly CreditCard CC1 = new CreditCard
+        private readonly Employee Emp1 = new Employee
         {
 
+            Id = 1234
+
+        };
+
+        private readonly CreditCard CC1 = new CreditCard
+        {
+            Id = 30,
             CreditLimit = 500m,
             CurrentDebt = 500m,
-            CreditCardNumber = 5,
-            CustomerId = 1
+            CreditCardNumber = 5
 
         };
 
         private readonly Customer Cus1 = new Customer
         {
+            Id = 10,
             Address = "Test",
             PhoneNumber = 10,
             City = "Test",
@@ -50,6 +58,7 @@ namespace SecureXTest
 
         private readonly Transaction Trans1 = new Transaction
         {
+            Id = 123,
             Recipient = "Test",
             DateOfTransaction = DateTime.Now,
             TransactionAmount = 500m
@@ -57,10 +66,11 @@ namespace SecureXTest
 
         private readonly User User1 = new User
         {
-               UserName = "Test",
-               FirstName = "Test",
-               LastName = "Test"
-    };
+            Id = 408,
+            UserName = "Test",
+            FirstName = "Test",
+            LastName = "Test"
+         };
 
         [CustomAssertion]
         [Fact]
@@ -121,7 +131,7 @@ namespace SecureXTest
 
             using (var context = new SecureXContext.SecureXdbContext(options))
             {
-                Assert.Equal(1, context.Account.CountAsync().Result);
+                Assert.Equal(1, context.Account.FindAsync(Acc1.Id).Id);
 
             }
         }
@@ -145,8 +155,89 @@ namespace SecureXTest
 
             using (var context = new SecureXContext.SecureXdbContext(options))
             {
-                Assert.Equal(1, context.CreditCard.CountAsync().Result);
+                Assert.Equal(1, context.CreditCard.FindAsync(CC1.Id).Id);
 
+            }
+        }
+
+        [Fact]
+        public async void ShouldUpdateCreditCard()
+        {
+
+            var options = new DbContextOptionsBuilder<SecureXContext.SecureXdbContext>()
+           .UseInMemoryDatabase(databaseName: "testXdb")
+             .Options;
+
+            using (var context = new SecureXContext.SecureXdbContext(options))
+            {
+                var service = new SecureXRepository(context);
+
+                await service.AddCreditCard(CC1);
+                await service.Save();
+                CC1.CreditLimit = 111500m;
+                await service.UpdateCreditCard(CC1);
+                await service.Save();
+            }
+
+
+            using (var context = new SecureXContext.SecureXdbContext(options))
+            {
+                Assert.Equal(111500m, CC1.CreditLimit);
+                Assert.Equal(30, CC1.Id);
+
+            }
+        }
+
+        [Fact]
+        public async void ShouldDeleteCreditCard()
+        {
+
+            var options = new DbContextOptionsBuilder<SecureXContext.SecureXdbContext>()
+           .UseInMemoryDatabase(databaseName: "testXdb")
+             .Options;
+
+            using (var context = new SecureXContext.SecureXdbContext(options))
+            {
+                var service = new SecureXRepository(context);
+
+                await service.AddCreditCard(CC1);
+                await service.Save();
+                await service.DeleteCreditCard(CC1.Id);
+                await service.Save();
+            }
+
+
+            using (var context = new SecureXContext.SecureXdbContext(options))
+            {
+                Assert.Equal(0, context.CreditCard.CountAsync().Result);
+
+            }
+        }
+
+        [Fact]
+        [CustomAssertion]
+        public async void ShouldGetCreditCardByID()
+        {
+
+            var options = new DbContextOptionsBuilder<SecureXContext.SecureXdbContext>()
+           .UseInMemoryDatabase(databaseName: "testXdb")
+             .Options;
+
+            CreditCard CC2;
+
+            using (var context = new SecureXContext.SecureXdbContext(options))
+            {
+                var service = new SecureXRepository(context);
+                
+                await service.AddCreditCard(CC1);
+                CC2 = await service.GetCreditCardById(CC1.Id);
+                await service.Save();
+            }
+
+
+            using (var context = new SecureXContext.SecureXdbContext(options))
+            {
+                CC2.Should().BeEquivalentTo(CC1);         
             }
         }
 
@@ -169,8 +260,91 @@ namespace SecureXTest
 
             using (var context = new SecureXContext.SecureXdbContext(options))
             {
-                Assert.Equal(1, context.Customer.CountAsync().Result);
+                Assert.Equal(1, context.Customer.FindAsync(Cus1.Id).Id);
 
+            }
+        }
+
+     
+        [Fact]
+        public async void ShouldUpdateCustomer()
+        {
+
+            var options = new DbContextOptionsBuilder<SecureXContext.SecureXdbContext>()
+           .UseInMemoryDatabase(databaseName: "testXdb")
+             .Options;
+
+            using (var context = new SecureXContext.SecureXdbContext(options))
+            {
+                var service = new SecureXRepository(context);
+
+                await service.AddCustomer(Cus1);
+                await service.Save();
+                Cus1.PhoneNumber = 1294123;
+                await service.UpdateCustomer(Cus1);
+                await service.Save();
+            }
+
+
+            using (var context = new SecureXContext.SecureXdbContext(options))
+            {
+                Assert.Equal(1294123, Cus1.PhoneNumber);
+                Assert.Equal(10, Cus1.Id);
+
+            }
+        }
+
+        [Fact]
+        public async void ShouldDeleteCustomer()
+        {
+
+            var options = new DbContextOptionsBuilder<SecureXContext.SecureXdbContext>()
+           .UseInMemoryDatabase(databaseName: "testXdb")
+             .Options;
+
+            using (var context = new SecureXContext.SecureXdbContext(options))
+            {
+                var service = new SecureXRepository(context);
+
+                await service.AddCustomer(Cus1);
+                await service.Save();
+                await service.DeleteCustomer(Cus1.Id);
+                await service.Save();
+            }
+
+
+            using (var context = new SecureXContext.SecureXdbContext(options))
+            {
+                Assert.Equal(0, context.Customer.CountAsync().Result);
+
+            }
+        }
+
+
+        [Fact]
+        [CustomAssertion]
+        public async void ShouldGetAccountByID()
+        {
+
+            var options = new DbContextOptionsBuilder<SecureXContext.SecureXdbContext>()
+           .UseInMemoryDatabase(databaseName: "testXdb")
+             .Options;
+
+            Account Acc2;
+
+            using (var context = new SecureXContext.SecureXdbContext(options))
+            {
+                var service = new SecureXRepository(context);
+
+                await service.AddAccount(Acc1);
+                Acc2 = await service.GetAccountById(Acc1.Id);
+                await service.Save();
+            }
+
+
+            using (var context = new SecureXContext.SecureXdbContext(options))
+            {
+                Acc2.Should().BeEquivalentTo(Acc1);
             }
         }
 
@@ -194,7 +368,7 @@ namespace SecureXTest
 
             using (var context = new SecureXContext.SecureXdbContext(options))
             {
-                Assert.Equal(1, context.User.CountAsync().Result);
+                Assert.Equal(1, context.User.FindAsync(User1.Id).Id);
 
             }
         }
@@ -219,11 +393,65 @@ namespace SecureXTest
 
             using (var context = new SecureXContext.SecureXdbContext(options))
             {
-                Assert.Equal(1, context.Bank.CountAsync().Result);
+                Assert.Equal(1, context.Bank.FindAsync(Bank1.Id).Id);
+
 
             }
         }
 
+        [Fact]
+        public async void ShouldAddEmployee()
+        {
+
+            var options = new DbContextOptionsBuilder<SecureXContext.SecureXdbContext>()
+           .UseInMemoryDatabase(databaseName: "testXdb")
+             .Options;
+
+
+            using (var context = new SecureXContext.SecureXdbContext(options))
+            {
+                var service = new SecureXRepository(context);
+
+                await service.AddEmployee(Emp1);
+                await service.Save();
+            }
+
+
+            using (var context = new SecureXContext.SecureXdbContext(options))
+            {
+                Assert.Equal(1, context.Employee.FindAsync(Emp1.Id).Id);
+
+
+            }
+        }
+
+        [Fact]
+        public async void ShouldUpdateAccount()
+        {
+
+            var options = new DbContextOptionsBuilder<SecureXContext.SecureXdbContext>()
+           .UseInMemoryDatabase(databaseName: "testXdb")
+             .Options;
+
+
+            using (var context = new SecureXContext.SecureXdbContext(options))
+            {
+                var service = new SecureXRepository(context);
+
+                await service.AddAccount(Acc1);
+                await service.Save();
+                Acc1.Funds = -500m;
+                await service.UpdateAccount(Acc1);
+                await service.Save();
+            }
+
+
+            using (var context = new SecureXContext.SecureXdbContext(options))
+            {
+                Assert.Equal(-500m, Acc1.Funds);
+                Assert.Equal(500, Acc1.Id);
+            }
+        }
 
     }
 }
