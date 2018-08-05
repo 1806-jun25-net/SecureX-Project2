@@ -42,19 +42,23 @@ namespace SecureXLibrary
         public static CreditCard Map(SecureXContext.CreditCard creditcard) => new CreditCard
         {
             Id = creditcard.Id,
+            CreditLine = creditcard.CreditLine,
             CreditLimit = creditcard.CreditLimit,
             CurrentDebt = creditcard.CurrentDebt,
             CreditCardNumber = creditcard.CreditCardNumber,
-            CustomerId = creditcard.CustomerId
+            CustomerId = creditcard.CustomerId,
+            Status = creditcard.Status
         };
 
         public static SecureXContext.CreditCard Map(CreditCard creditcard) => new SecureXContext.CreditCard
         {
             Id = creditcard.Id,
+            CreditLine = creditcard.CreditLine,
             CreditLimit = creditcard.CreditLimit,
             CurrentDebt = creditcard.CurrentDebt,
             CreditCardNumber = creditcard.CreditCardNumber,
-            CustomerId = creditcard.CustomerId
+            CustomerId = creditcard.CustomerId,
+            Status = creditcard.Status
         };
 
         public static Customer Map(SecureXContext.Customer customer) => new Customer

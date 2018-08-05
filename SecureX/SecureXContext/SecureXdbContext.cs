@@ -62,11 +62,18 @@ namespace SecureXContext
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
 
+                entity.Property(e => e.CreditLine).HasColumnType("decimal(18, 2)");
+
                 entity.Property(e => e.CreditLimit).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.CurrentDebt).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
+                
+                entity.Property(e => e.Status)
+                    .IsRequired()
+                    .HasMaxLength(128)
+                    .IsUnicode(true);
 
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.CreditCard)
