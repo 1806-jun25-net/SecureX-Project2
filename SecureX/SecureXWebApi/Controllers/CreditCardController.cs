@@ -54,7 +54,7 @@ namespace SecureXWebApi.Controllers
 
         // POST api/<controller>
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreditCard cc)
+        public async Task<IActionResult> Create(CreditCard cc)
         {
             cc.Id = 0;
             await IRepo.AddCreditCard(cc);

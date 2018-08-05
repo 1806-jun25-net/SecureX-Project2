@@ -77,7 +77,7 @@ namespace SecureXWebApi.Controllers
                 return NotFound();
             }
 
-            selectAcc.AccountType = account.Status;
+            selectAcc.Status = account.Status;
             selectAcc.Funds = account.Funds;
             await IRepo.UpdateAccount(selectAcc);
             await IRepo.Save();

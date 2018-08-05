@@ -57,7 +57,7 @@ namespace SecureXWebApi.Controllers
 
         // PUT api/<controller>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromBody] Bank bank)
+        public async Task<IActionResult> Update(Bank bank)
         {
             Bank selectBank = await IRepo.GetBankById(bank.Id);
 
