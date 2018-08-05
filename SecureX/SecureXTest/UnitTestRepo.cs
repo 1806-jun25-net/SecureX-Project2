@@ -113,10 +113,10 @@ namespace SecureXTest
         }
 
         [Fact]
-        public async void ShouldAddAccount()
+        public  void ShouldAddAccount()
         {
             var options = new DbContextOptionsBuilder<SecureXContext.SecureXdbContext>()
-                 .UseInMemoryDatabase(databaseName: "testXdb")
+                 .UseInMemoryDatabase(databaseName: "testXdb342342")
                  .Options;
 
 
@@ -124,8 +124,6 @@ namespace SecureXTest
             {
                 var service = new SecureXRepository(context);
 
-                await service.AddAccount(Acc1);
-                await service.Save();
             }
 
 
@@ -140,7 +138,7 @@ namespace SecureXTest
         public async void ShouldAddCreditCard()
         {
             var options = new DbContextOptionsBuilder<SecureXContext.SecureXdbContext>()
-                 .UseInMemoryDatabase(databaseName: "testXdb")
+                 .UseInMemoryDatabase(databaseName: "testXdb252352")
                  .Options;
 
 
@@ -150,12 +148,12 @@ namespace SecureXTest
 
                 await service.AddCreditCard(CC1);
                 await service.Save();
-            }
 
+            }
 
             using (var context = new SecureXContext.SecureXdbContext(options))
             {
-                Assert.Equal(1, context.CreditCard.FindAsync(CC1.Id).Id);
+                Assert.NotNull(context.CreditCard.FindAsync(CC1.Id).Result);
 
             }
         }
@@ -165,7 +163,7 @@ namespace SecureXTest
         {
 
             var options = new DbContextOptionsBuilder<SecureXContext.SecureXdbContext>()
-           .UseInMemoryDatabase(databaseName: "testXdb")
+           .UseInMemoryDatabase(databaseName: "testXdb41241231")
              .Options;
 
             using (var context = new SecureXContext.SecureXdbContext(options))
@@ -193,7 +191,7 @@ namespace SecureXTest
         {
 
             var options = new DbContextOptionsBuilder<SecureXContext.SecureXdbContext>()
-           .UseInMemoryDatabase(databaseName: "testXdb")
+           .UseInMemoryDatabase(databaseName: "testXdb12315123")
              .Options;
 
             using (var context = new SecureXContext.SecureXdbContext(options))
@@ -220,7 +218,7 @@ namespace SecureXTest
         {
 
             var options = new DbContextOptionsBuilder<SecureXContext.SecureXdbContext>()
-           .UseInMemoryDatabase(databaseName: "testXdb")
+           .UseInMemoryDatabase(databaseName: "testXdb9347293427")
              .Options;
 
             CreditCard CC2;
@@ -245,7 +243,7 @@ namespace SecureXTest
         public async void ShouldAddCustomer()
         {
             var options = new DbContextOptionsBuilder<SecureXContext.SecureXdbContext>()
-                 .UseInMemoryDatabase(databaseName: "testXdb")
+                 .UseInMemoryDatabase(databaseName: "testXdb219237918")
                  .Options;
 
 
@@ -255,12 +253,13 @@ namespace SecureXTest
 
                 await service.AddCustomer(Cus1);
                 await service.Save();
+
             }
 
 
             using (var context = new SecureXContext.SecureXdbContext(options))
             {
-                Assert.Equal(1, context.Customer.FindAsync(Cus1.Id).Id);
+                Assert.NotNull(context.Customer.FindAsync(Cus1.Id).Result);
 
             }
         }
@@ -271,7 +270,7 @@ namespace SecureXTest
         {
 
             var options = new DbContextOptionsBuilder<SecureXContext.SecureXdbContext>()
-           .UseInMemoryDatabase(databaseName: "testXdb")
+           .UseInMemoryDatabase(databaseName: "testXdb3123141")
              .Options;
 
             using (var context = new SecureXContext.SecureXdbContext(options))
@@ -299,7 +298,7 @@ namespace SecureXTest
         {
 
             var options = new DbContextOptionsBuilder<SecureXContext.SecureXdbContext>()
-           .UseInMemoryDatabase(databaseName: "testXdb")
+           .UseInMemoryDatabase(databaseName: "testXdb421512")
              .Options;
 
             using (var context = new SecureXContext.SecureXdbContext(options))
@@ -327,7 +326,7 @@ namespace SecureXTest
         {
 
             var options = new DbContextOptionsBuilder<SecureXContext.SecureXdbContext>()
-           .UseInMemoryDatabase(databaseName: "testXdb")
+           .UseInMemoryDatabase(databaseName: "testXdb000921")
              .Options;
 
             Account Acc2;
@@ -353,7 +352,7 @@ namespace SecureXTest
         {
 
             var options = new DbContextOptionsBuilder<SecureXContext.SecureXdbContext>()
-           .UseInMemoryDatabase(databaseName: "testXdb")
+           .UseInMemoryDatabase(databaseName: "testXdb29317")
              .Options;
 
 
@@ -368,7 +367,7 @@ namespace SecureXTest
 
             using (var context = new SecureXContext.SecureXdbContext(options))
             {
-                Assert.Equal(1, context.User.FindAsync(User1.Id).Id);
+                Assert.NotNull(context.User.FindAsync(User1.Id).Result);
 
             }
         }
@@ -377,8 +376,15 @@ namespace SecureXTest
         public async void ShouldAddBank()
         {
 
+            Bank Bank3123 = new Bank
+            {
+                Id = 4000,
+                Reserves = 500000m,
+                City = "Reston"
+            };
+
             var options = new DbContextOptionsBuilder<SecureXContext.SecureXdbContext>()
-           .UseInMemoryDatabase(databaseName: "testXdb")
+           .UseInMemoryDatabase(databaseName: "testXdb2381963")
              .Options;
 
 
@@ -388,12 +394,13 @@ namespace SecureXTest
 
                 await service.AddBank(Bank1);
                 await service.Save();
+
             }
 
 
             using (var context = new SecureXContext.SecureXdbContext(options))
             {
-                Assert.Equal(1, context.Bank.FindAsync(Bank1.Id).Id);
+                Assert.NotNull(context.Bank.FindAsync(Bank3123.Id).Result);
 
 
             }
@@ -404,7 +411,7 @@ namespace SecureXTest
         {
 
             var options = new DbContextOptionsBuilder<SecureXContext.SecureXdbContext>()
-           .UseInMemoryDatabase(databaseName: "testXdb")
+           .UseInMemoryDatabase(databaseName: "testXdb23198261")
              .Options;
 
 
@@ -414,12 +421,13 @@ namespace SecureXTest
 
                 await service.AddEmployee(Emp1);
                 await service.Save();
+
             }
 
 
             using (var context = new SecureXContext.SecureXdbContext(options))
             {
-                Assert.Equal(1, context.Employee.FindAsync(Emp1.Id).Id);
+                Assert.NotNull(context.Employee.FindAsync(Emp1.Id).Result);
 
 
             }
@@ -430,7 +438,7 @@ namespace SecureXTest
         {
 
             var options = new DbContextOptionsBuilder<SecureXContext.SecureXdbContext>()
-           .UseInMemoryDatabase(databaseName: "testXdb")
+           .UseInMemoryDatabase(databaseName: "testXdb238196")
              .Options;
 
 
