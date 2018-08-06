@@ -52,6 +52,28 @@ namespace SecureXWebApi.Controllers
             }
         }
 
+        // PUT api/<controller>/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(CreditCard creditCard)
+        {
+            CreditCard selectCC = await IRepo.GetCreditCardById(creditCard.Id);
+
+
+            if (selectCC == null)
+            {
+                return NotFound();
+            }
+
+            selectCC.Status = creditCard.Status;
+            selectCC.CreditLine = creditCard.CreditLine;
+            selectCC.CreditLimit = creditCard.CreditLimit;
+            selectCC.CurrentDebt = creditCard.CurrentDebt;
+            await IRepo.UpdateCreditCard(selectCC);
+            await IRepo.Save();
+
+            return NoContent();
+        }
+
         // POST api/<controller>
         [HttpPost]
         public async Task<IActionResult> Create(CreditCard cc)
